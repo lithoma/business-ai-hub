@@ -1,0 +1,182 @@
+{
+  "Douyin_Business_Cockpit/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/a1_space_config.md": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "Douyin_Business_Cockpit/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/a2_space_config.md": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "Douyin_Business_Cockpit/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/benchmark_results.md": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "Douyin_Business_Cockpit/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/metric_views_ddl.sql": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "Douyin_Business_Cockpit/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/snapshot_summary.md": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "Douyin_Business_Cockpit/manifest.mf": {
+    "bytes": 101,
+    "sha256": "f779feb2b9902bcd8396efba88f5b31e2eae394ef39ff21bcde4d562a378b3e4"
+  },
+  "business-ai-hub/README-DEPLOY.md": {
+    "bytes": 3234,
+    "sha256": "08244afb38c3a48e50250eba0f27fb3ddec16885834373a8cb7952d2bff09c17"
+  },
+  "business-ai-hub/app.py": {
+    "bytes": 19248,
+    "sha256": "6a94ae611dcbbcaef5c21a8dea93ea65cd8713991654cdd73ec0f0b3df7ce321"
+  },
+  "business-ai-hub/app.yaml": {
+    "bytes": 86,
+    "sha256": "65a2c196fbc04a9be7c89c3d626f26bcef8763c629616ed20a07969163fef41b"
+  },
+  "business-ai-hub/frontend/index.html": {
+    "bytes": 451,
+    "sha256": "166e2e698a9ed2f1f18c51b02cc47bfc74cfacb91812683af042a0c3a6d18690"
+  },
+  "business-ai-hub/frontend/package.json": {
+    "bytes": 561,
+    "sha256": "f977b7f5b781b1a34b11eaccbdd93f019e8445329f480d1d1e8593ca192e89bf"
+  },
+  "business-ai-hub/frontend/src/App.tsx": {
+    "bytes": 32125,
+    "sha256": "1fd362f41ab679e5cfdff364a29cc13e025fcd25c9d1f61b0d3d67b12a82ef32"
+  },
+  "business-ai-hub/frontend/src/main.tsx": {
+    "bytes": 233,
+    "sha256": "26210b6a01ea35ab17cc467c59d16c11176e15725301c0bcc5a767b6ce03c2e4"
+  },
+  "business-ai-hub/frontend/src/styles.css": {
+    "bytes": 19292,
+    "sha256": "746aa9c9511ab500a547db4ed668f0b7274e87cc4296eea654fe65a0393bf970"
+  },
+  "business-ai-hub/frontend/tsconfig.json": {
+    "bytes": 526,
+    "sha256": "61d8bd1ca5e0410990e1ef2bbbe0cab9c7e28073954f58cace8965b94031f47e"
+  },
+  "business-ai-hub/frontend/vite.config.ts": {
+    "bytes": 281,
+    "sha256": "6afe114eb82b3240704a60595f8f8bf70393b7de7336cc74426f57d21eaf808e"
+  },
+  "business-ai-hub/package.json": {
+    "bytes": 197,
+    "sha256": "fcc61b86806b316c2ece73336f6659dd7edb65182387afc25362119e182a079a"
+  },
+  "business-ai-hub/patches/APP_PY_APPEND.txt": {
+    "bytes": 422,
+    "sha256": "8f89ed24c886447abb18d41bc0979c70c3d36ee3deaaeca7838f52950d172562"
+  },
+  "business-ai-hub/requirements.txt": {
+    "bytes": 102,
+    "sha256": "12226f3b55ab84122d0e539b2cf8e567e4b11d1af8278ac3686779f1e51c858f"
+  },
+  "business-task-manager-v1/business-task-manager-v1/GENIE_CODE_SETUP_PROMPT.txt": {
+    "bytes": 3135,
+    "sha256": "ef56fe40eb98d107f67ba2dc60df7b8dae1dd4961f32cdcaffe26c4a4fdf2856"
+  },
+  "business-task-manager-v1/business-task-manager-v1/OUTBOX_EMPTY_TABLE.sql": {
+    "bytes": 383,
+    "sha256": "b0a410bfc8df1503f33e93625db1434a6f5b8313bfb3d7fcb616c8d3cd62d462"
+  },
+  "business-task-manager-v1/business-task-manager-v1/README_部署说明.md": {
+    "bytes": 7495,
+    "sha256": "155c8d3886e33ac91642a523f68118d5619cd5e2f75ee30086893757ad9ec466"
+  },
+  "business-task-manager-v1/business-task-manager-v1/agent_client.py": {
+    "bytes": 5300,
+    "sha256": "b9e848c277d964daf9532a41050ef31c168d6df0552ce9bfd93045c28474f024"
+  },
+  "business-task-manager-v1/business-task-manager-v1/alert_outbox.sql": {
+    "bytes": 930,
+    "sha256": "eef22c521ebc99432aaa32fed508354d057d45e3613aca037565293232533d94"
+  },
+  "business-task-manager-v1/business-task-manager-v1/main.py": {
+    "bytes": 866,
+    "sha256": "e92bac7dfb7ff387d3e889fdfd477698ba56c6873311c868bad217c8090e9476"
+  },
+  "business-task-manager-v1/business-task-manager-v1/outbox.py": {
+    "bytes": 2384,
+    "sha256": "3cf8e22e5396cf681a44055b4c4ed60fb4fa17413cb65434cbb9adceb36f9bbf"
+  },
+  "business-task-manager-v1/business-task-manager-v1/requirements.txt": {
+    "bytes": 121,
+    "sha256": "c04eef1406a7df78f942c58a32514c40a25a280ccf98105e6b8877653313d754"
+  },
+  "business-task-manager-v1/business-task-manager-v1/settings.yaml": {
+    "bytes": 786,
+    "sha256": "9e54343e23f22c551f73c2cadc2e0d92d73f7fde10bef3807a9ab88163e82776"
+  },
+  "business-task-manager-v1/business-task-manager-v1/task_engine.py": {
+    "bytes": 8679,
+    "sha256": "0c5faa9ea9255b781a1948790cebee16a778f94cb7b9a301aa3c11c629c683f5"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/competitor_risk/config.yaml": {
+    "bytes": 327,
+    "sha256": "5fff91cdd0e5501f9bc95b95f19a3eca99aa3e99f9774e5e2cd462b40d4d4c0a"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/competitor_risk/report_prompt.md": {
+    "bytes": 217,
+    "sha256": "66be05f326a9ed6e7042dab34fca7a8eb2404916985574edc9c472e616f2159f"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/competitor_risk/report_template.md": {
+    "bytes": 106,
+    "sha256": "b1e12c18c1668844d7fdadf0d521474bbff42c2f29d2355fc17b3d287c7a4ee4"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/competitor_risk/trigger_prompt.md": {
+    "bytes": 394,
+    "sha256": "934fb215e59413811f2299ff30ffd26fc721c1fe2fc18903c79a4ad91f7d9d4f"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/daily_sales/config.yaml": {
+    "bytes": 252,
+    "sha256": "6580c667319da4db3050e198461770af5b7274c08d99870ff573869a75857cd8"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/daily_sales/report_prompt.md": {
+    "bytes": 252,
+    "sha256": "c08c315b1dc5da23cbf414f84b5c71e148b6d5bc844bf0c8e9784d2a13413b1e"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/daily_sales/report_template.md": {
+    "bytes": 66,
+    "sha256": "2fa24acea4fc84ef57b683a222e4faddd475cf5033eb0dba03c2c488f9f517b5"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/sales_anomaly/config.yaml": {
+    "bytes": 372,
+    "sha256": "83aef0045e6ed182c98bc71f3ca1af3f205d195c9c2f0a7d3ed758ded32bede4"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/sales_anomaly/report_prompt.md": {
+    "bytes": 410,
+    "sha256": "c7d4512411797686cac64af44555fab0bfde88226bcc15e6315c2b4a148ea18a"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/sales_anomaly/report_template.md": {
+    "bytes": 112,
+    "sha256": "4489fb2f73df4c2d610b67e95f0be4309a1b2d88061dd98428f8e0d8206ebb8b"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/sales_anomaly/trigger.sql": {
+    "bytes": 549,
+    "sha256": "7e92dd2c0d0392c58285edef0372540961c76b7ee075d842d0171e69f2834337"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/weekly_sales/config.yaml": {
+    "bytes": 212,
+    "sha256": "75d0649e7c0709fcd41c7dc57c800f0519e5b815049d96b26cea8bf63d7b846a"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/weekly_sales/report_prompt.md": {
+    "bytes": 250,
+    "sha256": "6976a1bbd8d61552944f73b7581c99c579acdfce1c0d721f247eb895a0d8011d"
+  },
+  "business-task-manager-v1/business-task-manager-v1/tasks/weekly_sales/report_template.md": {
+    "bytes": 84,
+    "sha256": "0fc37e7e61722b979ac698e5c581150424adebaa5c061bfa8194366959d43360"
+  },
+  "business-task-manager-v1/manifest.mf": {
+    "bytes": 101,
+    "sha256": "63213b247936aa9ca2982dc1c58b56040221d05724e5f7b487c20223e8dd61f5"
+  },
+  "manifest.mf": {
+    "bytes": 101,
+    "sha256": "411bc3117bccc213863baeed93fe2f4c557c5dde7e437cbbd0f11b2a1b732f00"
+  }
+}

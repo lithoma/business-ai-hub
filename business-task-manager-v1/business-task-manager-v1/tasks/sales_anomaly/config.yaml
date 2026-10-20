@@ -1,0 +1,12 @@
+task_id: sales_anomaly
+name: 每日销售异常检查
+enabled: false  # Genie Code: enable ONLY after replacing placeholder SQL with verified KPI logic
+schedule:
+  frequency: daily
+trigger:
+  type: sql
+  file: trigger.sql
+report:
+  agent: genie_a1 # Switch to supervisor after its API route + OAuth are configured
+  prompt: report_prompt.md
+  template: report_template.md

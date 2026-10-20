@@ -1,0 +1,11 @@
+task_id: daily_sales
+name: 销售日报
+enabled: true  # Enable after choosing the business data/source and prompt
+schedule:
+  frequency: daily
+trigger:
+  type: always
+report:
+  agent: genie_a1
+  prompt: report_prompt.md
+  template: report_template.md

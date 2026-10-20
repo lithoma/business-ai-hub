@@ -1,0 +1,15 @@
+Set up the uploaded Business Task Manager V1 project. CONFIGURATION ONLY: do not run jobs, query agents, send emails, perform tests, unpause schedules, or modify the old M6 demo.
+
+Project path (already uploaded by user):
+/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/
+Read README_部署说明.md and settings.yaml first. Do not redesign the Python engine or create additional orchestrators.
+
+1. Existing IDs are already in settings.yaml: A1 Genie 01f1c60941551d9b94f73515f09e4b7b, A2 Genie 01f1c60944fa1a43bf79ff847cd5323d, Supervisor App agent-bricks-douyin-cockpit. Preserve them.
+2. Inspect the OLD VERIFIED KPI detection implementation solely to copy its REAL anomaly SQL/logic into tasks/sales_anomaly/trigger.sql. Contract: one row, BOOLEAN should_trigger, optional reason; bind :business_date. Do NOT reuse old M6 kpi_alert_reports as a substitute for detection. If the verified detector is Python-only or exact SQL/table columns are unknown, leave task disabled and report BLOCKED; do not attempt a costly SQL rewrite or invent logic without approval. Enable ONLY sales_anomaly after correct adaptation. Other sample tasks stay disabled.
+3. Inspect the deployed Supervisor App's actual invocation endpoint and job OAuth requirements. Configure settings.yaml supervisor.app_url and endpoint_path ONLY if confirmed. If authenticated invocation would require unimplemented token refresh/permissions, leave report.agent=genie_a1 for V1 and report supervisor integration as pending. DO NOT change or redeploy the existing Supervisor App.
+4. Create ONE NEW job named "Business Task Manager V1" with 2 tasks: first a Workspace Python-script task pointing at main.py using Spark-capable Job compute with databricks-sdk>=0.122.0, PyYAML, requests; second a SQL Alert task depending on Python success. max_concurrent_runs=1, max_retries=0. Daily schedule 09:00 Asia/Shanghai, PAUSED. No extra cron / watchdog / condition tasks.
+5. Create ONE NEW SQL Alert V2 named "Business Task Manager V1 - Outbox Email" using the exact SQL from alert_outbox.sql. Alert condition: first-row should_notify > 0. Subscription: existing email destination ea82f125-dac5-4eee-bf35-61a3ef4cdee1 (confirm ownership/recipient). Notification body includes {{QUERY_RESULT_TABLE}}, notify_on_ok=false, retrigger_seconds=1 if exposed in UI. Disable its standalone schedule, use only the Job's Alert task. The Python job is expected to CREATE workspace.douyin.business_task_outbox_v1 at runtime: do not run it now. If Alert creation requires the table to exist first, create ONLY the empty Delta table using the exact outbox.py schema (no dummy rows, no query execution for testing).
+6. Keep legacy M6 Jobs 154252282617018 and 480870378532889 PAUSED. Do not edit legacy Alert 3526956768809863.
+7. Before stopping, READ BACK configuration (no execution), and report only: new Job ID, new Alert ID, exact Python path, schedule PAUSED, email group, SQL trigger adaptation status, Supervisor endpoint status, retrigger setting status, remaining blockers. STOP.
+
+Never claim email delivery or end-to-end success; this request explicitly excludes testing.
