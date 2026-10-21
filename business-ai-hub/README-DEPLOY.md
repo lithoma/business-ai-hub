@@ -73,7 +73,13 @@ raw access to the shared metadata tables containing other users' report snapshot
 3. Create the Registry/history tables from `database/` **after adapting the catalog
    and schema**. This is an explicit administrator step, not an application startup
    migration. Do not import the archived enabled Job or Alert definitions.
-4. Supply the values in `.env.example` using the approved server secret/config
+4. Adapt the separate Task Manager `settings.yaml` too: company catalog/schema,
+   Registry/runs/outbox table names, mail configuration and schedule. Its current
+   `business_date_offset_days: 487` is for the old simulated data; set **1** for
+   the previous calendar day in the company environment. Do not carry the local
+   previous-observed-day test SQL into production.
+
+   Supply the values in `.env.example` using the approved server secret/config
    system. This app does not auto-load `.env`. Keep OAuth, Databricks M2M, Gmail
    secrets, refresh tokens and review signing keys outside Git and browser storage.
 5. Configure the metadata profile outside Git using the SDK OAuth M2M credential

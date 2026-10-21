@@ -5,7 +5,7 @@ schema: douyin
 schedule:
   timezone: Asia/Shanghai
   time: '09:00'
-  business_date_offset_days: 487  # 09:00 checks the last completed day by default
+  business_date_offset_days: 487  # Local simulated data only. Set 1 for company previous-calendar-day checks.
 notification:
   provider: outbox  # Later choose gmail after OAuth setup and approved rollout.
   legacy_alert_disabled: false
