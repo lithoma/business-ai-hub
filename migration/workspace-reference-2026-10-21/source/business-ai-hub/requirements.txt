@@ -1,0 +1,5 @@
+fastapi>=0.104,<1
+uvicorn[standard]>=0.24,<1
+databricks-sdk>=0.122.0,<1
+PyYAML>=6.0,<7
+pydantic>=2,<3

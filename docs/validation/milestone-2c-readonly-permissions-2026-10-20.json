@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-20",
+  "scope": "read-only Databricks CLI metadata; no inference or SQL execution",
+  "profile": "business-ai-hub",
+  "app_principal": {
+    "application_id": "fbc62528-8dda-4dad-8835-c2c22016b422",
+    "display_name": "app-164q7w business-ai-hub",
+    "active": true,
+    "direct_group": "account users"
+  },
+  "catalog_grants": {
+    "securable": "system",
+    "principal": "account users",
+    "privileges": [
+      "USE_CATALOG"
+    ]
+  },
+  "schema_grants": {
+    "securable": "system.ai",
+    "principal": "account users",
+    "privileges": [
+      "EXECUTE",
+      "READ_VOLUME",
+      "SELECT",
+      "USE_SCHEMA"
+    ]
+  },
+  "effective_grants": {
+    "securable": "system.ai.gpt-oss-20b",
+    "principal": "fbc62528-8dda-4dad-8835-c2c22016b422",
+    "outcome": "DENIED_METADATA_ACCESS",
+    "message": "User does not have READ METADATA on MODEL_SERVICE",
+    "app_access_confirmed": false
+  },
+  "job": {
+    "job_id": "997638013141610",
+    "pause_status": "PAUSED",
+    "quartz_cron_expression": "21 0 9 * * ?",
+    "timezone": "Asia/Shanghai",
+    "max_concurrent_runs": 1,
+    "run_as": "lithomas@wustl.edu",
+    "downstream_alert_id": "962624129077297",
+    "alert_run_if": "ALL_SUCCESS"
+  },
+  "mutations_performed": [],
+  "inference_requests": 0,
+  "job_runs_started": 0
+}

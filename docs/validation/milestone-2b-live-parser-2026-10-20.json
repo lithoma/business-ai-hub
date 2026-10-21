@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-20",
+  "endpoint": "system.ai.gpt-oss-20b",
+  "identity_type": "CLI user (not App Service Principal)",
+  "requirements": "每周一检查善存上一周的GMV，如果比前一周下降超过15%，分析原因并生成销售风险报告。",
+  "mocked": false,
+  "max_output_tokens": 3000,
+  "saved_to_registry": false,
+  "deployed": false,
+  "job_started": false,
+  "started_at_utc": "2026-10-20T06:52:23.931916+00:00",
+  "usage": {
+    "prompt_tokens": 1036,
+    "completion_tokens": 896,
+    "total_tokens": 1932,
+    "cache_read_input_tokens": 0,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "finish_reason": "stop",
+  "status": "passed",
+  "checks": {
+    "pydantic_validation": true,
+    "weekly_monday": true,
+    "conditional_trigger": true,
+    "threshold_preserved": true,
+    "comparison_period_preserved": true,
+    "brand_preserved": true,
+    "draft_disabled": true,
+    "no_generated_sql": true
+  },
+  "configuration": {
+    "task_id": "local_validation_only",
+    "name": "每周一检查善存GMV",
+    "description": "检查善存上一周GMV是否比前一周下降超过15%，若满足条件则分析原因并生成销售风险报告。",
+    "enabled": false,
+    "schedule": {
+      "frequency": "weekly",
+      "time": "09:00",
+      "timezone": "Asia/Shanghai",
+      "weekday": "monday",
+      "interval_days": 0,
+      "start_date": "",
+      "cron": ""
+    },
+    "trigger": {
+      "type": "agent",
+      "sql": "",
+      "agent": "genie_a1",
+      "prompt": "检查善存上一周GMV是否比前一周下降超过15%"
+    },
+    "report": {
+      "agent": "genie_a1",
+      "prompt": "分析下降原因并生成销售风险报告",
+      "template": "",
+      "draft_review": {
+        "original_request": "每周一检查善存上一周的GMV，如果比前一周下降超过15%，分析原因并生成销售风险报告。",
+        "conditional": true,
+        "assumptions": [
+          "使用默认时间09:00",
+          "时区为Asia/Shanghai",
+          "每周一触发"
+        ],
+        "warnings": [
+          "AI 触发条件尚未进行数据可用性与准确性验收。",
+          "当前仅生成草稿，调度、触发和报告执行尚未接入。"
+        ],
+        "missing_information": [
+          "缺失开始日期",
+          "缺失GMV数据表及字段信息"
+        ]
+      }
+    },
+    "owner": ""
+  },
+  "inference_requests": 1,
+  "elapsed_seconds": 7.38
+}

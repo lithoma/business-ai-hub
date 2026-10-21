@@ -1,0 +1,26 @@
+{
+  "verified_at_utc": "2026-10-20T07:08:32.660297+00:00",
+  "scope": "offline automated tests and build; no cloud execution",
+  "backend_tests": {
+    "runner": "python -m unittest discover -s tests -q",
+    "passed": 37
+  },
+  "frontend_tests": {
+    "runner": "npm run test --workspace business-ai-hub-frontend",
+    "passed": 14
+  },
+  "production_build": {
+    "runner": "npm run build",
+    "typescript": "passed",
+    "vite": "passed"
+  },
+  "coverage_notes": [
+    "2B-to-2C lifecycle/execution integration uses explicit fake cloud adapters only",
+    "SQL generation parsed locally in Databricks dialect, not executed on live Delta",
+    "Original YAML report template path verified",
+    "Pending notifications recover across dispatch days without regenerating reports",
+    "No model requests, deployments, Job starts, schema changes, or emails in 2C"
+  ],
+  "credential_pattern_scan": "no matches in changed source/docs",
+  "tracked_generated_build_files": "none"
+}

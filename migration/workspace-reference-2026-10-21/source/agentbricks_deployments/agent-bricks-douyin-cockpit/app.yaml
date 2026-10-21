@@ -1,0 +1,27 @@
+command:
+- uv
+- run
+- start-server
+env:
+- name: MLFLOW_TRACKING_URI
+  value: databricks
+- name: MLFLOW_EXPERIMENT_ID
+  value: '3900968299622464'
+- name: AGENT_MEMORY_STORE
+  value: douyin-business-cockpit-agent-lieimr-memory
+- name: AGENT_SESSION_STORE
+  value: douyin-business-cockpit-agent-lieimr-sessions
+- name: PIP_INDEX_URL
+  value: https://pypi.org/simple/
+- name: UV_INDEX_URL
+  value: https://pypi.org/simple/
+- name: UV_DEFAULT_INDEX
+  value: https://pypi.org/simple/
+- name: DATABRICKS_AGENTBRICKS_RUNTIME_STORE_LAKEBASE_BRANCH
+  value: projects/databricks-internal-custom-agents/branches/production
+- name: DATABRICKS_AGENTBRICKS_RUNTIME_STORE_DATABASE
+  value: runtime-agent-bricks-douyi-9ec25687-6bb7-496b-bc4c-0ef3cf9ddaa3
+- name: DATABRICKS_AGENTBRICKS_RUNTIME_STORE_USERNAME
+  value: 5b6ebf63-1e9d-4b64-b56b-a1ed4df7380e
+- name: DATABRICKS_AGENTBRICKS_RUNTIME_STORE_SCHEMA
+  value: databricks_agentkit_runtime

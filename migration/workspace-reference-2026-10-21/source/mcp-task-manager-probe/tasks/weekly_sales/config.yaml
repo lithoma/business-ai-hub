@@ -1,0 +1,12 @@
+task_id: weekly_sales
+name: 销售周报
+enabled: false
+schedule:
+  frequency: weekly
+  weekday: monday
+trigger:
+  type: always
+report:
+  agent: genie_a1
+  prompt: report_prompt.md
+  template: report_template.md

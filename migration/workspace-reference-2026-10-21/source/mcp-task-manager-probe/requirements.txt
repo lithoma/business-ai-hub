@@ -1,0 +1,5 @@
+mcp>=1.8.0,<2
+pyyaml>=6.0
+databricks-sdk>=0.40.0
+uvicorn>=0.30.0
+starlette>=0.37.0

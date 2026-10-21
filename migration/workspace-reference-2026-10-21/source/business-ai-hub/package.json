@@ -1,0 +1,11 @@
+{
+  "name": "business-ai-hub",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace business-ai-hub-frontend"
+  }
+}

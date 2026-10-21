@@ -3,3 +3,10 @@ uvicorn[standard]>=0.24,<1
 databricks-sdk>=0.122.0,<1
 PyYAML>=6.0,<7
 pydantic>=2,<3
+requests>=2.31,<3
+
+sqlglot==30.0.0
+
+# Genie One MCP client. No endpoint or resource is provisioned by installation.
+mcp>=1.24,<2
+jsonschema>=4.25,<5

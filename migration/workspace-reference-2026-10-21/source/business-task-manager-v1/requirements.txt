@@ -1,0 +1,4 @@
+databricks-sdk>=0.122.0,<1
+PyYAML>=6.0,<7
+requests>=2.31,<3
+# pyspark is supplied by the Databricks Job compute runtime.

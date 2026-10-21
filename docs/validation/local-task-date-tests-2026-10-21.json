@@ -1,0 +1,38 @@
+{
+  "status": "partial_awaiting_business_rule",
+  "identity": "CLI user profile business-ai-hub; not App Service Principal acceptance",
+  "scope": "Two selected local SQL drafts, two business dates per task",
+  "business_dates": ["2025-06-24", "2025-06-27"],
+  "data_evidence": {
+    "source": "Existing Genie-approved workspace.douyin.mv_sales_metrics and GMV measure",
+    "range_checked": "2025-05-01 through 2025-06-30",
+    "available_brand_days": 20,
+    "missing_comparison_dates": ["2025-06-23", "2025-06-26"],
+    "finding": "Observed dates are three days apart; previous-calendar-day comparisons are unknown, not false"
+  },
+  "live_checks": {
+    "date_selection_selects": 1,
+    "condition_selects": 4,
+    "condition_http_status": [422, 422, 422, 422],
+    "condition_durations_seconds": [7.185, 4.872, 5.637, 5.301],
+    "valid_boolean_results": 0,
+    "tasks_activated": 0,
+    "report_agent_calls": 0,
+    "general_llm_calls": 0,
+    "validation_summary_emails_accepted": 1,
+    "gmail_duration_seconds": 6.457,
+    "gmail_message_id": "1a15d16c82e176e0",
+    "recipient_inbox_delivery_confirmed": false,
+    "actual_cost": null
+  },
+  "local_changes": [
+    "Four manual test records visible in the existing report history",
+    "Null condition errors now include the SQL-provided business reason",
+    "Reusable opt-in trial script for two drafts and two dates; reports/mail only on explicit flags; no send replay",
+    "Report and mail artifacts, task snapshots and credentials remain outside Git"
+  ],
+  "remaining": "Owner must choose whether to retain previous-calendar-day semantics and supply daily data, or explicitly change the comparison rule before positive/negative report acceptance and activation",
+  "deployment_or_job_start": false,
+  "cloud_crud_or_grant_changes": false,
+  "automatic_email_enabled": false
+}

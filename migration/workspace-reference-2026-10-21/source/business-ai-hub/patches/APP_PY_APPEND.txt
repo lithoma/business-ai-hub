@@ -1,0 +1,9 @@
+# === Business AI Hub frontend (append AFTER all existing API routes) ===
+# No changes to /api/health, /api/tasks, /api/chat, or Genie logic.
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+
+FRONTEND_DIST = Path(__file__).resolve().parent / "frontend" / "dist"
+if FRONTEND_DIST.is_dir():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="frontend")
+# === End frontend ===

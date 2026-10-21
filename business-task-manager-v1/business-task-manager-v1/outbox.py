@@ -22,14 +22,7 @@ def publish_batch(
 ) -> None:
     if not _FQN.fullmatch(table):
         raise ValueError("Outbox must be a valid three-part catalog.schema.table identifier")
-    spark.sql(f"""CREATE TABLE IF NOT EXISTS {table} (
-        dispatch_date DATE,
-        recipient_group STRING,
-        should_notify BOOLEAN,
-        report_count INT,
-        report_text STRING,
-        generated_at TIMESTAMP
-    ) USING DELTA""")
+    # Existing Outbox must be provisioned separately; the executor creates no tables.
     schema = StructType([
         StructField("dispatch_date", DateType(), False),
         StructField("recipient_group", StringType(), False),

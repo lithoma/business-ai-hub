@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>经营指标异常监测报告</title>
+</head>
+
+<body style="font-family:Arial,'Microsoft YaHei',sans-serif;
+             background:#f4f6f8;padding:24px;color:#243047;">
+
+<div style="max-width:760px;margin:auto;background:#ffffff;
+            padding:36px;border-radius:12px;">
+
+  <h1 style="color:#17365d;margin-bottom:4px;">
+    抖音业务驾驶舱
+  </h1>
+
+  <h2 style="color:#536579;margin-top:0;">
+    经营指标异常监测报告
+  </h2>
+
+  <p>
+    <b>报告日期：</b>{{ report_date }}<br>
+    <b>监测品牌：</b>{{ brand }}<br>
+    <b>监测范围：</b>{{ business_scope }}<br>
+    <b>对比日期：</b>{{ comparison_date }}<br>
+    <b>数据来源：</b>{{ data_source }}
+  </p>
+
+  <hr>
+
+  <h2>01｜异常概览</h2>
+
+  <p style="font-size:18px;color:#c0392b;">
+    检测到 {{ anomaly_count }} 项异常指标
+  </p>
+
+  <p>{{ executive_summary }}</p>
+
+  <h2>02｜关键经营指标</h2>
+
+  <table style="width:100%;border-collapse:collapse;">
+    <tr style="background:#edf2f7;">
+      <th align="left" style="padding:12px;">指标</th>
+      <th align="right" style="padding:12px;">本期</th>
+      <th align="right" style="padding:12px;">对比期</th>
+      <th align="right" style="padding:12px;">变化</th>
+      <th align="center" style="padding:12px;">状态</th>
+    </tr>
+
+    {% for metric in metrics %}
+    <tr>
+      <td style="padding:12px;border-bottom:1px solid #eee;">
+        {{ metric.name }}
+      </td>
+      <td align="right">{{ metric.current }}</td>
+      <td align="right">{{ metric.previous }}</td>
+      <td align="right">{{ metric.change }}</td>
+      <td align="center">{{ metric.status }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>03｜AI 智能洞察</h2>
+
+  <h3>核心发现</h3>
+  <p>{{ ai_insights.core_finding }}</p>
+
+  <h3>数据支持的分析</h3>
+  <p>{{ ai_insights.analysis }}</p>
+
+  <h3>尚待验证的因素</h3>
+  <p>{{ ai_insights.uncertainties }}</p>
+
+  <h2>04｜建议行动</h2>
+
+  <ol>
+    {% for action in recommendations %}
+    <li style="margin-bottom:10px;">{{ action }}</li>
+    {% endfor %}
+  </ol>
+
+  <h2>05｜数据与方法说明</h2>
+
+  <p style="font-size:13px;color:#667085;">
+    数据来源：{{ data_source }}<br>
+    数据状态：{{ data_status }}<br>
+    监测规则：{{ detection_method }}<br>
+    Job Run ID：{{ job_run_id }}
+  </p>
+
+  <hr>
+
+  <p style="font-size:12px;color:#8892a0;">
+    本报告由 Douyin Business Cockpit 自动生成。<br>
+    AI 分析仅基于已获取的数据，不应将未经验证的假设作为事实。
+  </p>
+
+</div>
+</body>
+</html>

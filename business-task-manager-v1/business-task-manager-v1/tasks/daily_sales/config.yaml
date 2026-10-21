@@ -6,6 +6,6 @@ schedule:
 trigger:
   type: always
 report:
-  agent: genie_a1
+  agent: genie_one
   prompt: report_prompt.md
   template: report_template.md

@@ -1,0 +1,64 @@
+{
+  "status": "passed",
+  "mode": "local temporary previous observed data day; production calendar-day logic unchanged",
+  "cases": [
+    {
+      "task": "善存销售提升邮件报告（测试：上一有数据日）",
+      "business_date": "2025-06-24",
+      "comparison_date": "2025-06-21",
+      "change_percent": "-16.92361695760040500437729178",
+      "should_trigger": false,
+      "status": "NOT_TRIGGERED",
+      "condition_seconds": 13.671
+    },
+    {
+      "task": "善存销售提升邮件报告（测试：上一有数据日）",
+      "business_date": "2025-06-27",
+      "comparison_date": "2025-06-24",
+      "change_percent": "10.42335461693721477137099964",
+      "should_trigger": true,
+      "status": "REPORT_CREATED",
+      "condition_seconds": 2.866,
+      "report_seconds": 40.253,
+      "mail": {
+        "status": "EMAIL_ACCEPTED",
+        "provider_message_id": "1a15d1e2f3759fd7",
+        "duration_seconds": 6.561
+      }
+    },
+    {
+      "task": "每日监控善存 GMV 下降超过10%提醒（测试：上一有数据日）",
+      "business_date": "2025-06-24",
+      "comparison_date": "2025-06-21",
+      "change_percent": "-16.92361695760040500437729178",
+      "should_trigger": true,
+      "status": "REPORT_CREATED",
+      "condition_seconds": 3.099,
+      "report_seconds": 9.217,
+      "mail": {
+        "status": "EMAIL_ACCEPTED",
+        "provider_message_id": "1a15d1e67ae382a1",
+        "duration_seconds": 1.921
+      }
+    },
+    {
+      "task": "每日监控善存 GMV 下降超过10%提醒（测试：上一有数据日）",
+      "business_date": "2025-06-27",
+      "comparison_date": "2025-06-24",
+      "change_percent": "10.42335461693721477137099964",
+      "should_trigger": false,
+      "status": "NOT_TRIGGERED",
+      "condition_seconds": 3.133
+    }
+  ],
+  "local_tasks_activated": 2,
+  "real_report_agent_calls": 2,
+  "emails_accepted": 2,
+  "email_inbox_delivery_confirmed": false,
+  "general_llm_calls": 0,
+  "actual_cost": null,
+  "genie_internal_tokens": null,
+  "production_or_databricks_resources_changed": false,
+  "job_started": false,
+  "limits": "SQL primary GMV/date/boolean were independently checked; extra metrics in Genie prose were not independently audited. This is CLI-user local testing, not App-SP/multiuser acceptance."
+}

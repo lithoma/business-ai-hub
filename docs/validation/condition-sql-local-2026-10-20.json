@@ -1,0 +1,30 @@
+{
+  "recorded_at_utc": "2026-10-20T07:56:34.399242+00:00",
+  "focused_checks": {
+    "backend_condition_sql": 6,
+    "frontend_condition_sql": 1,
+    "typescript_vite_build": "passed",
+    "historical_full_suite_rerun": false
+  },
+  "local_smoke": {
+    "existing_draft_can_activate": true,
+    "generation_and_test_routes_present": true,
+    "unsafe_sql_http_status": 422
+  },
+  "cloud_activity_by_agent": {
+    "genie_requests": 0,
+    "warehouse_queries": 0,
+    "parser_requests": 0,
+    "job_starts": 0,
+    "deployments": 0,
+    "emails": 0
+  },
+  "local_mode": {
+    "registry": "SQLite",
+    "activation": "explicit local state transitions only",
+    "sql_generation": "existing Genie Chat via explicit user click; may execute read-only queries",
+    "sql_test": "bounded SELECT via explicit user click",
+    "general_parser_attempts_remaining": 2
+  },
+  "acceptance_limit": "Real Genie/SQL integration has not been run by the agent; next user clicks perform the live data read."
+}

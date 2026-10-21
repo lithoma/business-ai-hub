@@ -1,0 +1,27 @@
+{
+  "verified_at_utc": "2026-10-20T07:24:27.736214+00:00",
+  "backend_tests_passed": 45,
+  "frontend_tests_passed": 16,
+  "typescript_and_vite": "passed",
+  "new_capabilities": [
+    "Direct Gmail provider with one send POST and uncertain-outcome protection",
+    "SQL-only CSV exports and provider-independent MIME",
+    "Explicit report delivery settings",
+    "Chat-to-task handoff without Genie call",
+    "Real local HTTP/SQLite create-edit-delete testing"
+  ],
+  "google_connector_check": "profile read succeeded; send/attachment tools available; no email sent",
+  "current_local_server": {
+    "url": "http://127.0.0.1:8765",
+    "mode": "local SQLite",
+    "real_parser": "disabled pending new authorization",
+    "cloud_writes": false,
+    "genie": false,
+    "jobs": false,
+    "email_sending": false
+  },
+  "paid_model_calls_this_work": 0,
+  "emails_sent": 0,
+  "databricks_resources_changed": false,
+  "credential_pattern_scan": "no matches"
+}

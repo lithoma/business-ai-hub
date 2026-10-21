@@ -18,3 +18,12 @@ venv/
 .mypy_cache/
 .ruff_cache/
 coverage/
+
+# Local Google OAuth downloads / refresh-token files
+client_secret*.json
+gmail-credentials*.json
+
+# Local development database
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm

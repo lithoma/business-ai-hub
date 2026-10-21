@@ -1,0 +1,13 @@
+task_id: competitor_risk
+name: 竞品动态风险检查
+enabled: false # Optional agent-triggered example; enable only when data access verified
+schedule:
+  frequency: daily
+trigger:
+  type: agent
+  agent: genie_a2
+  prompt: trigger_prompt.md
+report:
+  agent: genie_a2
+  prompt: report_prompt.md
+  template: report_template.md

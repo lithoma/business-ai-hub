@@ -1,0 +1,38 @@
+{
+  "recorded_at_utc": "2026-10-20T07:28:49.330671+00:00",
+  "service": "system.ai.gpt-oss-20b",
+  "execute_evidence": {
+    "source": "owner-reported Catalog Explorer check in this conversation",
+    "resource_type": "Model Service",
+    "principal": "All account users",
+    "privilege": "EXECUTE",
+    "inherited_from": "system.ai"
+  },
+  "parent_grants": {
+    "required": [
+      "USE CATALOG on system",
+      "USE SCHEMA on system.ai"
+    ],
+    "group_grants_previously_observed": true,
+    "app_effective_grants_verified": false
+  },
+  "authentication_check": {
+    "available_profile_auth_type": "databricks-cli",
+    "app_m2m_profile_available": false,
+    "environment_client_id_matches_app": false,
+    "environment_client_secret_present": false
+  },
+  "authorization": {
+    "unused_cli_three_call_allowance_superseded_by_latest_instruction": true,
+    "latest_scope": "offline implementation; at most one App-principal inference when integration identity is available"
+  },
+  "inference_requests_this_step": 0,
+  "app_identity_inference_requests": 0,
+  "databricks_resources_changed": false,
+  "verification": {
+    "backend_tests_passed": 51,
+    "permission_errors": "single request, provider-named privileges only; raw message not exposed",
+    "app_identity_gate": "personal CLI/wrong SCIM identity rejected before inference; explicit infer flag tested offline"
+  },
+  "integration_blocker": "App-principal authenticated environment unavailable locally; personal READ METADATA does not block local development"
+}

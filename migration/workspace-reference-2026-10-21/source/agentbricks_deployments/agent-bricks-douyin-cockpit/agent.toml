@@ -1,0 +1,23 @@
+schema_version = 1
+
+[agent]
+framework = "langgraph"
+server = "agentbricks"
+deployment_name = "douyin-cockpit"
+
+[memory_store]
+name = "douyin-business-cockpit-agent-lieimr-memory"
+
+[session_store]
+name = "douyin-business-cockpit-agent-lieimr-sessions"
+
+[tracing]
+experiment_name = "/Shared/agentbricks_traces/douyin-business-cockpit-agent-lieimr"
+[[tools]]
+id = "a1_sales_operations"
+auth = "app"
+source = {kind = "genie_agent", space_id = "01f1c60941551d9b94f73515f09e4b7b"}
+[[tools]]
+id = "a2_competition_market"
+auth = "app"
+source = {kind = "genie_agent", space_id = "01f1c60944fa1a43bf79ff847cd5323d"}

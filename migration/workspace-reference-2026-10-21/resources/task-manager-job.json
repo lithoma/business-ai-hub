@@ -1,0 +1,68 @@
+{
+  "created_time": 1792123724064,
+  "creator_user_name": "lithomas@wustl.edu",
+  "job_id": 997638013141610,
+  "run_as_user_name": "lithomas@wustl.edu",
+  "settings": {
+    "email_notifications": {
+      "no_alert_for_skipped_runs": false
+    },
+    "environments": [
+      {
+        "environment_key": "Default",
+        "spec": {
+          "dependencies": [
+            "databricks-sdk>=0.122.0",
+            "PyYAML>=6.0",
+            "requests>=2.31.0"
+          ],
+          "environment_version": "6"
+        }
+      }
+    ],
+    "format": "MULTI_TASK",
+    "max_concurrent_runs": 1,
+    "name": "Business Task Manager V1",
+    "performance_target": "PERFORMANCE_OPTIMIZED",
+    "queue": {
+      "enabled": true
+    },
+    "schedule": {
+      "pause_status": "PAUSED",
+      "quartz_cron_expression": "21 0 9 * * ?",
+      "timezone_id": "Asia/Shanghai"
+    },
+    "tasks": [
+      {
+        "alert_task": {
+          "alert_id": "962624129077297",
+          "warehouse_id": "a54c7a1cd51e6901"
+        },
+        "depends_on": [
+          {
+            "task_key": "run_task_manager"
+          }
+        ],
+        "disabled": false,
+        "email_notifications": {},
+        "run_if": "ALL_SUCCESS",
+        "task_key": "send_alert",
+        "timeout_seconds": 0
+      },
+      {
+        "disabled": false,
+        "email_notifications": {},
+        "environment_key": "Default",
+        "run_if": "ALL_SUCCESS",
+        "spark_python_task": {
+          "python_file": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/main.py"
+        },
+        "task_key": "run_task_manager",
+        "timeout_seconds": 0,
+        "webhook_notifications": {}
+      }
+    ],
+    "timeout_seconds": 0,
+    "webhook_notifications": {}
+  }
+}

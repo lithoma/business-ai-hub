@@ -1,0 +1,21 @@
+# V1: one fixed daily job trigger, one fixed recipient group.
+workspace_host: https://dbc-f19e9824-546f.cloud.databricks.com
+catalog: workspace
+schema: douyin
+schedule:
+  timezone: Asia/Shanghai
+  time: '09:00'
+  business_date_offset_days: 487  # 09:00 checks the last completed day by default
+notification:
+  outbox_table: workspace.douyin.business_task_outbox_v1
+  recipient_group: default
+  max_report_chars: 12000
+agents:
+  genie_a1: '01f1c60941551d9b94f73515f09e4b7b'
+  genie_a2: '01f1c60944fa1a43bf79ff847cd5323d'
+  supervisor:
+    app_name: agent-bricks-douyin-cockpit
+    # Fill ONLY after confirming the deployed app's actual HTTP route.
+    app_url: ''
+    endpoint_path: '' # e.g., /responses OR /api/invocations; do not guess
+    oauth_token_env: DATABRICKS_APP_OAUTH_TOKEN

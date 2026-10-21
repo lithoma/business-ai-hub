@@ -1,0 +1,837 @@
+{
+  "captured_at": "2026-10-21T06:47:30.853258+00:00",
+  "source_host": "https://dbc-f19e9824-546f.cloud.databricks.com",
+  "purpose": "Migration reference only. Do not deploy or execute archived applications.",
+  "files": [
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/competitor_risk/report_template.md",
+      "file": "source/business-task-manager-v1/tasks/competitor_risk/report_template.md",
+      "bytes": 106,
+      "sha256": "b1e12c18c1668844d7fdadf0d521474bbff42c2f29d2355fc17b3d287c7a4ee4"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/competitor_risk/config.yaml",
+      "file": "source/business-task-manager-v1/tasks/competitor_risk/config.yaml",
+      "bytes": 327,
+      "sha256": "5fff91cdd0e5501f9bc95b95f19a3eca99aa3e99f9774e5e2cd462b40d4d4c0a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/competitor_risk/trigger_prompt.md",
+      "file": "source/business-task-manager-v1/tasks/competitor_risk/trigger_prompt.md",
+      "bytes": 394,
+      "sha256": "934fb215e59413811f2299ff30ffd26fc721c1fe2fc18903c79a4ad91f7d9d4f"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/competitor_risk/report_prompt.md",
+      "file": "source/business-task-manager-v1/tasks/competitor_risk/report_prompt.md",
+      "bytes": 217,
+      "sha256": "66be05f326a9ed6e7042dab34fca7a8eb2404916985574edc9c472e616f2159f"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/weekly_sales/config.yaml",
+      "file": "source/business-task-manager-v1/tasks/weekly_sales/config.yaml",
+      "bytes": 212,
+      "sha256": "75d0649e7c0709fcd41c7dc57c800f0519e5b815049d96b26cea8bf63d7b846a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/weekly_sales/report_template.md",
+      "file": "source/business-task-manager-v1/tasks/weekly_sales/report_template.md",
+      "bytes": 84,
+      "sha256": "0fc37e7e61722b979ac698e5c581150424adebaa5c061bfa8194366959d43360"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/weekly_sales/report_prompt.md",
+      "file": "source/business-task-manager-v1/tasks/weekly_sales/report_prompt.md",
+      "bytes": 250,
+      "sha256": "6976a1bbd8d61552944f73b7581c99c579acdfce1c0d721f247eb895a0d8011d"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/sales_anomaly/report_template.md",
+      "file": "source/business-task-manager-v1/tasks/sales_anomaly/report_template.md",
+      "bytes": 112,
+      "sha256": "4489fb2f73df4c2d610b67e95f0be4309a1b2d88061dd98428f8e0d8206ebb8b"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/sales_anomaly/trigger.sql",
+      "file": "source/business-task-manager-v1/tasks/sales_anomaly/trigger.sql",
+      "bytes": 549,
+      "sha256": "7e92dd2c0d0392c58285edef0372540961c76b7ee075d842d0171e69f2834337"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/sales_anomaly/report_prompt.md",
+      "file": "source/business-task-manager-v1/tasks/sales_anomaly/report_prompt.md",
+      "bytes": 410,
+      "sha256": "c7d4512411797686cac64af44555fab0bfde88226bcc15e6315c2b4a148ea18a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/sales_anomaly/config.yaml",
+      "file": "source/business-task-manager-v1/tasks/sales_anomaly/config.yaml",
+      "bytes": 372,
+      "sha256": "83aef0045e6ed182c98bc71f3ca1af3f205d195c9c2f0a7d3ed758ded32bede4"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/daily_sales/config.yaml",
+      "file": "source/business-task-manager-v1/tasks/daily_sales/config.yaml",
+      "bytes": 252,
+      "sha256": "6580c667319da4db3050e198461770af5b7274c08d99870ff573869a75857cd8"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/daily_sales/report_template.md",
+      "file": "source/business-task-manager-v1/tasks/daily_sales/report_template.md",
+      "bytes": 66,
+      "sha256": "2fa24acea4fc84ef57b683a222e4faddd475cf5033eb0dba03c2c488f9f517b5"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/tasks/daily_sales/report_prompt.md",
+      "file": "source/business-task-manager-v1/tasks/daily_sales/report_prompt.md",
+      "bytes": 252,
+      "sha256": "c08c315b1dc5da23cbf414f84b5c71e148b6d5bc844bf0c8e9784d2a13413b1e"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/requirements.txt",
+      "file": "source/business-task-manager-v1/requirements.txt",
+      "bytes": 121,
+      "sha256": "c04eef1406a7df78f942c58a32514c40a25a280ccf98105e6b8877653313d754"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/settings.yaml",
+      "file": "source/business-task-manager-v1/settings.yaml",
+      "bytes": 786,
+      "sha256": "9e54343e23f22c551f73c2cadc2e0d92d73f7fde10bef3807a9ab88163e82776"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/main.py",
+      "file": "source/business-task-manager-v1/main.py",
+      "bytes": 866,
+      "sha256": "e92bac7dfb7ff387d3e889fdfd477698ba56c6873311c868bad217c8090e9476"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/README_部署说明.md",
+      "file": "source/business-task-manager-v1/README_部署说明.md",
+      "bytes": 7495,
+      "sha256": "155c8d3886e33ac91642a523f68118d5619cd5e2f75ee30086893757ad9ec466"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/task_engine.py",
+      "file": "source/business-task-manager-v1/task_engine.py",
+      "bytes": 8679,
+      "sha256": "0c5faa9ea9255b781a1948790cebee16a778f94cb7b9a301aa3c11c629c683f5"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/agent_client.py",
+      "file": "source/business-task-manager-v1/agent_client.py",
+      "bytes": 5300,
+      "sha256": "b9e848c277d964daf9532a41050ef31c168d6df0552ce9bfd93045c28474f024"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/alert_outbox.sql",
+      "file": "source/business-task-manager-v1/alert_outbox.sql",
+      "bytes": 930,
+      "sha256": "eef22c521ebc99432aaa32fed508354d057d45e3613aca037565293232533d94"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/OUTBOX_EMPTY_TABLE.sql",
+      "file": "source/business-task-manager-v1/OUTBOX_EMPTY_TABLE.sql",
+      "bytes": 383,
+      "sha256": "b0a410bfc8df1503f33e93625db1434a6f5b8313bfb3d7fcb616c8d3cd62d462"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/outbox.py",
+      "file": "source/business-task-manager-v1/outbox.py",
+      "bytes": 2384,
+      "sha256": "3cf8e22e5396cf681a44055b4c4ed60fb4fa17413cb65434cbb9adceb36f9bbf"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-task-manager-v1/GENIE_CODE_SETUP_PROMPT.txt",
+      "file": "source/business-task-manager-v1/GENIE_CODE_SETUP_PROMPT.txt",
+      "bytes": 3135,
+      "sha256": "ef56fe40eb98d107f67ba2dc60df7b8dae1dd4961f32cdcaffe26c4a4fdf2856"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/README-DEPLOY.md",
+      "file": "source/business-ai-hub/README-DEPLOY.md",
+      "bytes": 3234,
+      "sha256": "08244afb38c3a48e50250eba0f27fb3ddec16885834373a8cb7952d2bff09c17"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/patches/APP_PY_APPEND.txt",
+      "file": "source/business-ai-hub/patches/APP_PY_APPEND.txt",
+      "bytes": 422,
+      "sha256": "8f89ed24c886447abb18d41bc0979c70c3d36ee3deaaeca7838f52950d172562"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/requirements.txt",
+      "file": "source/business-ai-hub/requirements.txt",
+      "bytes": 102,
+      "sha256": "12226f3b55ab84122d0e539b2cf8e567e4b11d1af8278ac3686779f1e51c858f"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/app.py",
+      "file": "source/business-ai-hub/app.py",
+      "bytes": 19248,
+      "sha256": "6a94ae611dcbbcaef5c21a8dea93ea65cd8713991654cdd73ec0f0b3df7ce321"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/app.yaml",
+      "file": "source/business-ai-hub/app.yaml",
+      "bytes": 86,
+      "sha256": "65a2c196fbc04a9be7c89c3d626f26bcef8763c629616ed20a07969163fef41b"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/package.json",
+      "file": "source/business-ai-hub/package.json",
+      "bytes": 197,
+      "sha256": "fcc61b86806b316c2ece73336f6659dd7edb65182387afc25362119e182a079a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/frontend/tsconfig.json",
+      "file": "source/business-ai-hub/frontend/tsconfig.json",
+      "bytes": 526,
+      "sha256": "61d8bd1ca5e0410990e1ef2bbbe0cab9c7e28073954f58cace8965b94031f47e"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/frontend/package.json",
+      "file": "source/business-ai-hub/frontend/package.json",
+      "bytes": 561,
+      "sha256": "f977b7f5b781b1a34b11eaccbdd93f019e8445329f480d1d1e8593ca192e89bf"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/frontend/index.html",
+      "file": "source/business-ai-hub/frontend/index.html",
+      "bytes": 451,
+      "sha256": "166e2e698a9ed2f1f18c51b02cc47bfc74cfacb91812683af042a0c3a6d18690"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/frontend/vite.config.ts",
+      "file": "source/business-ai-hub/frontend/vite.config.ts",
+      "bytes": 281,
+      "sha256": "6afe114eb82b3240704a60595f8f8bf70393b7de7336cc74426f57d21eaf808e"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/frontend/src/App.tsx",
+      "file": "source/business-ai-hub/frontend/src/App.tsx",
+      "bytes": 32125,
+      "sha256": "1fd362f41ab679e5cfdff364a29cc13e025fcd25c9d1f61b0d3d67b12a82ef32"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/frontend/src/styles.css",
+      "file": "source/business-ai-hub/frontend/src/styles.css",
+      "bytes": 19292,
+      "sha256": "746aa9c9511ab500a547db4ed668f0b7274e87cc4296eea654fe65a0393bf970"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/business-ai-hub/frontend/src/main.tsx",
+      "file": "source/business-ai-hub/frontend/src/main.tsx",
+      "bytes": 233,
+      "sha256": "26210b6a01ea35ab17cc467c59d16c11176e15725301c0bcc5a767b6ce03c2e4"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/抖音双agentQuest/DF数据字典.xlsx",
+      "file": "source/抖音双agentQuest/DF数据字典.xlsx",
+      "bytes": 240243,
+      "sha256": "a36bfabde8c1b9584a1b2c1d56885c4866a820fcc5041327504cd77561c85f43"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/抖音双agentQuest/SYNTHETIC_DATA_README.md",
+      "file": "source/抖音双agentQuest/SYNTHETIC_DATA_README.md",
+      "bytes": 3983,
+      "sha256": "dd889ba22ed69d9aae190cd24a06c057ad4635272cd1ead8158b69cf6f460f1b"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/pyproject.toml",
+      "file": "source/douyin-business-cockpit-agent/pyproject.toml",
+      "bytes": 1088,
+      "sha256": "8af155660c1ce6ab6e18f52eba6e7a372312c29e0968b5fc6bb74b8870f5e480"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/CLAUDE.md",
+      "file": "source/douyin-business-cockpit-agent/CLAUDE.reference.md",
+      "bytes": 11,
+      "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/templates/anomaly_report.html",
+      "file": "source/douyin-business-cockpit-agent/templates/anomaly_report.html",
+      "bytes": 2645,
+      "sha256": "c24ba5128034d4fa3be477206ccd19754754aaf55751a2f5125acaf0a3f38727"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/run_kpi_monitor.py",
+      "file": "source/douyin-business-cockpit-agent/run_kpi_monitor.py",
+      "bytes": 9915,
+      "sha256": "8763b081dde85adb8ea932144e60a8cc267aa3bc3cf72d152182e001d45b37fe"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent/prompts.py",
+      "file": "source/douyin-business-cockpit-agent/agent/prompts.py",
+      "bytes": 2813,
+      "sha256": "9b04b020d4197a1d79adededd6b99018c23f7f053041f3b0da7db17c83c3d575"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent/tools/__init__.py",
+      "file": "source/douyin-business-cockpit-agent/agent/tools/__init__.py",
+      "bytes": 915,
+      "sha256": "e513a6078786dc4faf539c8dad37673272d4ee8bf1c18ac7c983823533e615ee"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent/tools/send_message.py",
+      "file": "source/douyin-business-cockpit-agent/agent/tools/send_message.py",
+      "bytes": 866,
+      "sha256": "46fb915cd62b39887b908a5ac4f8b8e9c0778e0f77ae11fbc72f75fa84b6fe21"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent/tools/sample_tool.py",
+      "file": "source/douyin-business-cockpit-agent/agent/tools/sample_tool.py",
+      "bytes": 442,
+      "sha256": "4771e8e19db93d032b02c9d56f8c4d298f14b270372fde9bcc74d159ab560e05"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent/__init__.py",
+      "file": "source/douyin-business-cockpit-agent/agent/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent/agent.py",
+      "file": "source/douyin-business-cockpit-agent/agent/agent.py",
+      "bytes": 8708,
+      "sha256": "2325de97f8170cd847fc8c66f13f0867e5f5382d07212d22c6881d2ea1eca765"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent/mcps.py",
+      "file": "source/douyin-business-cockpit-agent/agent/mcps.py",
+      "bytes": 964,
+      "sha256": "f6c621e4abe15c1e91c2adf54940701047d31d5ede81d927c4b0f29168581b04"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent/router.py",
+      "file": "source/douyin-business-cockpit-agent/agent/router.py",
+      "bytes": 2096,
+      "sha256": "11450804a25f7db2702fea857e6381f44807cbb82370fbae616f87a51d3c2477"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/tests/test_routing.py",
+      "file": "source/douyin-business-cockpit-agent/tests/test_routing.py",
+      "bytes": 10228,
+      "sha256": "30f145fb8119e8578eedc98594a898bf6bdf865e5705c30e2dc6be306b42bfa9"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/tests/__init__.py",
+      "file": "source/douyin-business-cockpit-agent/tests/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/tests/test_workspace.py",
+      "file": "source/douyin-business-cockpit-agent/tests/test_workspace.py",
+      "bytes": 924,
+      "sha256": "466463cfdadbfd6e39445d11761795d7de9dc9d80042e57f953978f0625206e1"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/tests/test_agent.py",
+      "file": "source/douyin-business-cockpit-agent/tests/test_agent.py",
+      "bytes": 7870,
+      "sha256": "5e1837abd9c7b0272babdfd801ec5e687f6cbceda10b837877d919fea5bfdca5"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/tests/test_runtime.py",
+      "file": "source/douyin-business-cockpit-agent/tests/test_runtime.py",
+      "bytes": 633,
+      "sha256": "031644ad801e7c1dfe175accb780d0b0e553a896cc6bace98cc4e0c8676faef1"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/tests/test_demo_ui.py",
+      "file": "source/douyin-business-cockpit-agent/tests/test_demo_ui.py",
+      "bytes": 22135,
+      "sha256": "328bd65801575b5432ce9d0892bd1f6cbe23d1fecffa5497268e29d8bfa3cb14"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/app.yaml",
+      "file": "source/douyin-business-cockpit-agent/app.yaml",
+      "bytes": 927,
+      "sha256": "1dc582f7401af7c08374a789c45819c3a24638708649d91920935e7a11dc41d1"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/.env.example",
+      "file": "source/douyin-business-cockpit-agent/.env.example",
+      "bytes": 2192,
+      "sha256": "cf475780a6b2de49290d6c08597ef3095c3deef26c2d893edf89fc054c52a183"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/.gitignore",
+      "file": "source/douyin-business-cockpit-agent/.gitignore",
+      "bytes": 3846,
+      "sha256": "8cf988f36b386b10fe43d57c43f5f188e73feb92ab002ef51d07ec6f450e736a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/README.md",
+      "file": "source/douyin-business-cockpit-agent/README.md",
+      "bytes": 3386,
+      "sha256": "77f7964f527dcf801b65f76d0037b183073ef559d740c51b437b3e90bd78ae06"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/AGENTKIT_CONTRACT.md",
+      "file": "source/douyin-business-cockpit-agent/AGENTKIT_CONTRACT.md",
+      "bytes": 6434,
+      "sha256": "3cf1466914c702780fbf2afbe3dac89d64e0ed3e1452a14ad09c77a27b5df6d9"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/runtime/__init__.py",
+      "file": "source/douyin-business-cockpit-agent/runtime/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/runtime/adapter.py",
+      "file": "source/douyin-business-cockpit-agent/runtime/adapter.py",
+      "bytes": 5775,
+      "sha256": "b55656f567998a2a5fc2da95ecad97025b69156eea2b853a5ab7ddb70e10023e"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/runtime/ui.py",
+      "file": "source/douyin-business-cockpit-agent/runtime/ui.py",
+      "bytes": 19561,
+      "sha256": "78630c7a146a3e42f8ac715969b432223462886821e5ce19e2654346d0de390f"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/runtime/main.py",
+      "file": "source/douyin-business-cockpit-agent/runtime/main.py",
+      "bytes": 728,
+      "sha256": "c749a26a424be54a17f99d13ef1d95f1db12ce2c09ec76a9a0be5a5590c86cbb"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/AGENTS.md",
+      "file": "source/douyin-business-cockpit-agent/AGENTS.reference.md",
+      "bytes": 1175,
+      "sha256": "045da4f45bc2abe6bb42cf6e20c123f151dce318128479b6c04e2c8cf1bc63fc"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/CHAT_APP.md",
+      "file": "source/douyin-business-cockpit-agent/CHAT_APP.md",
+      "bytes": 3589,
+      "sha256": "135db1fa3a6fe8953590d39d8790062447e276eb3e3fc400d4a82e038541697c"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/ui/app.js",
+      "file": "source/douyin-business-cockpit-agent/ui/app.js",
+      "bytes": 56002,
+      "sha256": "6a258e3b5c30e30bb5a08fc0794f54d1a4dc8a0c9fb90ff873c5fb4e65366040"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/ui/markdown-it-15.0.2.min.js",
+      "file": "source/douyin-business-cockpit-agent/ui/markdown-it-15.0.2.min.js",
+      "bytes": 116226,
+      "sha256": "986ca379abd57ba7fc6a4e47151dad61416298a79e14569681c2164abb045879"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/ui/styles.css",
+      "file": "source/douyin-business-cockpit-agent/ui/styles.css",
+      "bytes": 36023,
+      "sha256": "9cb2acd7ee21df8f260241c72f1ef2919e000365cafff8c85af158f31284d4d4"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/ui/index.html",
+      "file": "source/douyin-business-cockpit-agent/ui/index.html",
+      "bytes": 19982,
+      "sha256": "ebf583748de1ad061682414a499545f3bde1f5f97a086a01904ed3aa30212cb2"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/agent.toml",
+      "file": "source/douyin-business-cockpit-agent/agent.toml",
+      "bytes": 606,
+      "sha256": "631d4ba975ebc270e89779edd547e7dc83d79682827f1d7306bb0c4331f28af2"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/demo_orchestrator",
+      "file": "source/douyin-business-cockpit-agent/demo_orchestrator.py",
+      "bytes": 18629,
+      "sha256": "95841dff5f0709f2a05df443d705a8baf5ca06876dee41dce346d14c3499ed25"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/alert_integration.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/alert_integration.py",
+      "bytes": 17098,
+      "sha256": "a6b38221b7fe6b0e2c7efa8b4fa3ebbb415ce879bebcca646b0b98cc2efc458a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/email_sender.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/email_sender.py",
+      "bytes": 21575,
+      "sha256": "e9bde4bb36e2916c20bc19e6ea64c8b1b08f7a4796c6eda68a4578b30954fc9b"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/anomaly.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/anomaly.py",
+      "bytes": 8667,
+      "sha256": "b9614b5eb22a025a6034695827f576fc654ed99cfa53324d916d3ac3b702b2ed"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/monitor.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/monitor.py",
+      "bytes": 20485,
+      "sha256": "c3fbc1742bfff645d48666e65833900011387f9a69ef2cd10602558583fea0b0"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/config.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/config.py",
+      "bytes": 12077,
+      "sha256": "8e09109cd90919bfb4748dd29c35e9fd4af8bfe9529f3032e0103f886e74e638"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/report.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/report.py",
+      "bytes": 8631,
+      "sha256": "c57c4d13b23cd8df2ababd59393643911b91b563e4f0892e6868817e0a07c217"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/simulation.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/simulation.py",
+      "bytes": 17313,
+      "sha256": "8d274009860e355c1aa538b2edf05f8713d9e124e065b270312fd07482649d5b"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/agent_integration.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/agent_integration.py",
+      "bytes": 14962,
+      "sha256": "e9cdaaec8e24fa6db7f4fd4554c5a7a8d42f54c09bbf75f6faa9d36e9baed483"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/__init__.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/__init__.py",
+      "bytes": 1280,
+      "sha256": "0a2bd6053482764034a7a8b610ae8ec1aa07bf01d1cfd4b1ddba56d9e7972c3e"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/job_control.py",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/job_control.py",
+      "bytes": 2415,
+      "sha256": "f8b37ef41fc1116c6507c6a4153c45c5ab44efb3d260e17624296f0a8549124b"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/kpi_monitor/JOB_CONFIG.md",
+      "file": "source/douyin-business-cockpit-agent/kpi_monitor/JOB_CONFIG.md",
+      "bytes": 1453,
+      "sha256": "97ad6e9d43cc8682d68ebbfa65104c46cd9ba2f60fc43a76872961364b2c538f"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/a1_space_config.md",
+      "file": "source/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/a1_space_config.md",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/a2_space_config.md",
+      "file": "source/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/a2_space_config.md",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/snapshot_summary.md",
+      "file": "source/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/snapshot_summary.md",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/benchmark_results.md",
+      "file": "source/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/benchmark_results.md",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/metric_views_ddl.sql",
+      "file": "source/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/metric_views_ddl.sql",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/AGENTS.md",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/AGENTS.reference.md",
+      "bytes": 1175,
+      "sha256": "045da4f45bc2abe6bb42cf6e20c123f151dce318128479b6c04e2c8cf1bc63fc"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/agent.toml",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/agent.toml",
+      "bytes": 606,
+      "sha256": "631d4ba975ebc270e89779edd547e7dc83d79682827f1d7306bb0c4331f28af2"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/CHAT_APP.md",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/CHAT_APP.md",
+      "bytes": 3589,
+      "sha256": "135db1fa3a6fe8953590d39d8790062447e276eb3e3fc400d4a82e038541697c"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/README.md",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/README.md",
+      "bytes": 3386,
+      "sha256": "77f7964f527dcf801b65f76d0037b183073ef559d740c51b437b3e90bd78ae06"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/.env.example",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/.env.example",
+      "bytes": 2192,
+      "sha256": "cf475780a6b2de49290d6c08597ef3095c3deef26c2d893edf89fc054c52a183"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/app.yaml",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/app.yaml",
+      "bytes": 927,
+      "sha256": "1dc582f7401af7c08374a789c45819c3a24638708649d91920935e7a11dc41d1"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/CLAUDE.md",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/CLAUDE.reference.md",
+      "bytes": 11,
+      "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/pyproject.toml",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/pyproject.toml",
+      "bytes": 1088,
+      "sha256": "8af155660c1ce6ab6e18f52eba6e7a372312c29e0968b5fc6bb74b8870f5e480"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/.gitignore",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/.gitignore",
+      "bytes": 3846,
+      "sha256": "8cf988f36b386b10fe43d57c43f5f188e73feb92ab002ef51d07ec6f450e736a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/AGENTKIT_CONTRACT.md",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/AGENTKIT_CONTRACT.md",
+      "bytes": 6434,
+      "sha256": "3cf1466914c702780fbf2afbe3dac89d64e0ed3e1452a14ad09c77a27b5df6d9"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/agent.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/agent.py",
+      "bytes": 5661,
+      "sha256": "867e10e2c2ce0b3649cb89fb80f8569017343a09e578b731259a7131a42d34bb"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/prompts.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/prompts.py",
+      "bytes": 2602,
+      "sha256": "aaa265bd9bdf2055bb838e7ea7d9398a0fd38a444019021718d917856803a3dd"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/mcps.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/mcps.py",
+      "bytes": 964,
+      "sha256": "f6c621e4abe15c1e91c2adf54940701047d31d5ede81d927c4b0f29168581b04"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/tools/sample_tool.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/tools/sample_tool.py",
+      "bytes": 442,
+      "sha256": "4771e8e19db93d032b02c9d56f8c4d298f14b270372fde9bcc74d159ab560e05"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/tools/__init__.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/tools/__init__.py",
+      "bytes": 915,
+      "sha256": "e513a6078786dc4faf539c8dad37673272d4ee8bf1c18ac7c983823533e615ee"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/tools/send_message.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/tools/send_message.py",
+      "bytes": 866,
+      "sha256": "46fb915cd62b39887b908a5ac4f8b8e9c0778e0f77ae11fbc72f75fa84b6fe21"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/__init__.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/agent/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_runtime.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_runtime.py",
+      "bytes": 633,
+      "sha256": "031644ad801e7c1dfe175accb780d0b0e553a896cc6bace98cc4e0c8676faef1"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_workspace.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_workspace.py",
+      "bytes": 924,
+      "sha256": "466463cfdadbfd6e39445d11761795d7de9dc9d80042e57f953978f0625206e1"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_agent.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_agent.py",
+      "bytes": 7870,
+      "sha256": "5e1837abd9c7b0272babdfd801ec5e687f6cbceda10b837877d919fea5bfdca5"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/__init__.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_routing.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_routing.py",
+      "bytes": 10228,
+      "sha256": "30f145fb8119e8578eedc98594a898bf6bdf865e5705c30e2dc6be306b42bfa9"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_demo_ui.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/tests/test_demo_ui.py",
+      "bytes": 22135,
+      "sha256": "328bd65801575b5432ce9d0892bd1f6cbe23d1fecffa5497268e29d8bfa3cb14"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/runtime/adapter.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/runtime/adapter.py",
+      "bytes": 5775,
+      "sha256": "b55656f567998a2a5fc2da95ecad97025b69156eea2b853a5ab7ddb70e10023e"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/runtime/__init__.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/runtime/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/runtime/ui.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/runtime/ui.py",
+      "bytes": 19561,
+      "sha256": "78630c7a146a3e42f8ac715969b432223462886821e5ce19e2654346d0de390f"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/runtime/main.py",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/runtime/main.py",
+      "bytes": 728,
+      "sha256": "c749a26a424be54a17f99d13ef1d95f1db12ce2c09ec76a9a0be5a5590c86cbb"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/ui/index.html",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/ui/index.html",
+      "bytes": 19982,
+      "sha256": "ebf583748de1ad061682414a499545f3bde1f5f97a086a01904ed3aa30212cb2"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/ui/markdown-it-15.0.2.min.js",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/ui/markdown-it-15.0.2.min.js",
+      "bytes": 116226,
+      "sha256": "986ca379abd57ba7fc6a4e47151dad61416298a79e14569681c2164abb045879"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/ui/app.js",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/ui/app.js",
+      "bytes": 56002,
+      "sha256": "6a258e3b5c30e30bb5a08fc0794f54d1a4dc8a0c9fb90ff873c5fb4e65366040"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/agentbricks_deployments/agent-bricks-douyin-cockpit/ui/styles.css",
+      "file": "source/agentbricks_deployments/agent-bricks-douyin-cockpit/ui/styles.css",
+      "bytes": 36023,
+      "sha256": "9cb2acd7ee21df8f260241c72f1ef2919e000365cafff8c85af158f31284d4d4"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/mcp-task-manager-probe/tasks/weekly_sales/config.yaml",
+      "file": "source/mcp-task-manager-probe/tasks/weekly_sales/config.yaml",
+      "bytes": 212,
+      "sha256": "75d0649e7c0709fcd41c7dc57c800f0519e5b815049d96b26cea8bf63d7b846a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/mcp-task-manager-probe/tasks/daily_sales/config.yaml",
+      "file": "source/mcp-task-manager-probe/tasks/daily_sales/config.yaml",
+      "bytes": 252,
+      "sha256": "6580c667319da4db3050e198461770af5b7274c08d99870ff573869a75857cd8"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/mcp-task-manager-probe/tasks/competitor_risk/config.yaml",
+      "file": "source/mcp-task-manager-probe/tasks/competitor_risk/config.yaml",
+      "bytes": 327,
+      "sha256": "5fff91cdd0e5501f9bc95b95f19a3eca99aa3e99f9774e5e2cd462b40d4d4c0a"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/mcp-task-manager-probe/tasks/sales_anomaly/config.yaml",
+      "file": "source/mcp-task-manager-probe/tasks/sales_anomaly/config.yaml",
+      "bytes": 372,
+      "sha256": "83aef0045e6ed182c98bc71f3ca1af3f205d195c9c2f0a7d3ed758ded32bede4"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/mcp-task-manager-probe/app.py",
+      "file": "source/mcp-task-manager-probe/app.py",
+      "bytes": 2824,
+      "sha256": "128c427fc83527112627190ef0ea29d0143e8cec597b3691a2172da71cb3c2e1"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/mcp-task-manager-probe/requirements.txt",
+      "file": "source/mcp-task-manager-probe/requirements.txt",
+      "bytes": 83,
+      "sha256": "de8d056f531364007e20427d5939ab2c15db3e65a0e71a23e3d4b5441a64e922"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/mcp-task-manager-probe/app.yaml",
+      "file": "source/mcp-task-manager-probe/app.yaml",
+      "bytes": 30,
+      "sha256": "40f03ab5c00dcd4ef6786c39b68dc4cc76f9bfe77a37ce527ca57663fd28f216"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/genie_runtime_validation",
+      "file": "source/genie_runtime_validation.py",
+      "bytes": 11552,
+      "sha256": "66072d1cd76d0edc6e4b1adf9186e4ef049f2899889cd6613c0bce2108621d0c"
+    },
+    {
+      "workspace_path": "/Workspace/Users/lithomas@wustl.edu/demo_watchdog",
+      "file": "source/demo_watchdog.py",
+      "bytes": 10695,
+      "sha256": "603738036520c7c0e728867476e498d751656d481bf0753908a8bca5ff2b4755"
+    },
+    {
+      "resource": "former-sales-agent.json",
+      "file": "resources/former-sales-agent.json",
+      "bytes": 28420,
+      "sha256": "1ff373ce41f813d1346679cd91ac96d9e35741b2bb1a7ddfa110c500e36f96de"
+    },
+    {
+      "resource": "former-market-agent.json",
+      "file": "resources/former-market-agent.json",
+      "bytes": 46224,
+      "sha256": "ed2846b7f2c633a17f1730747cea479ee19c80b5272ae59228846eb65681d0a9"
+    },
+    {
+      "resource": "task-manager-job.json",
+      "file": "resources/task-manager-job.json",
+      "bytes": 1743,
+      "sha256": "ff18800d29a74a611e558224d6c6d0f42eb55d9ab0f715c0759ca44b4bfbadde"
+    },
+    {
+      "resource": "catalog-tables.json",
+      "file": "resources/catalog-tables.json",
+      "bytes": 1554093,
+      "sha256": "da9fe260c03072002fe56992ff9c2cfb5117866fc58f16a9949dcbd095e8928d"
+    }
+  ],
+  "excluded": [
+    {
+      "path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/.pytest_cache",
+      "reason": "credentials, local state or generated output"
+    },
+    {
+      "path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/.databricks",
+      "reason": "credentials, local state or generated output"
+    },
+    {
+      "path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/.env",
+      "reason": "credentials, local state or generated output"
+    },
+    {
+      "path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/.agentbricks",
+      "reason": "credentials, local state or generated output"
+    },
+    {
+      "path": "/Workspace/Users/lithomas@wustl.edu/douyin-business-cockpit-agent/output",
+      "reason": "credentials, local state or generated output"
+    }
+  ],
+  "metadata_errors": [],
+  "model_calls": 0,
+  "sql_submissions": 0,
+  "cloud_writes": 0
+}

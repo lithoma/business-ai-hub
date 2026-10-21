@@ -7,15 +7,36 @@ schedule:
   time: '09:00'
   business_date_offset_days: 487  # 09:00 checks the last completed day by default
 notification:
+  provider: outbox  # Later choose gmail after OAuth setup and approved rollout.
+  legacy_alert_disabled: false
+  email:
+    enabled: false
+    from_address: ''
+    allowed_recipients: []
+    max_messages_per_dispatch: 20
+    max_attachment_bytes: 12582912
+    max_message_bytes: 20971520
+    templates:
+      default:
+        label: 标准业务报告
+        file: templates/email/default.html.j2
+    exports: {}  # Team-installed approved SELECT files; no invented business SQL.
   outbox_table: workspace.douyin.business_task_outbox_v1
   recipient_group: default
   max_report_chars: 12000
 agents:
-  genie_a1: '01f1c60941551d9b94f73515f09e4b7b'
-  genie_a2: '01f1c60944fa1a43bf79ff847cd5323d'
-  supervisor:
-    app_name: agent-bricks-douyin-cockpit
-    # Fill ONLY after confirming the deployed app's actual HTTP route.
-    app_url: ''
-    endpoint_path: '' # e.g., /responses OR /api/invocations; do not guess
-    oauth_token_env: DATABRICKS_APP_OAUTH_TOKEN
+  genie_one:
+    service: system.ai.genie_one_mcp
+    # Host and user credentials come from the authenticated session, never a Space ID.
+
+# 2C local implementation. No execution until explicitly enabled after rollout approval.
+execution:
+  enabled: false
+  runs_table: workspace.douyin.business_task_runs_v1
+registry:
+  enabled: true
+  table: workspace.douyin.business_task_registry_v1
+
+# Creator delegation must be supplied by an approved identity resolver before unattended runs.
+authorization:
+  require_creator: true
