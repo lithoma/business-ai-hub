@@ -219,14 +219,15 @@ class LocalTrials:
         return {'notification_status':status,'provider_message_id':message_id,'error':error}
 
 
-def register_routes(app, service):
+def register_routes(app, service, *, legacy_only=False):
     @app.get('/api/local-trials/settings')
     def settings():
         return {'enabled':True,'sender':service.sender,'recipient':service.recipient,
                 'mail_available':bool(service.send_message),'identity_mode':'single_user_local'}
 
-    @app.post('/api/tasks/{task_id}/trial',status_code=202)
-    def start(task_id: str, request: TrialRequest): return service.start(task_id,request)
+    if not legacy_only:
+        @app.post('/api/tasks/{task_id}/trial',status_code=202)
+        def start(task_id: str, request: TrialRequest): return service.start(task_id,request)
 
     @app.get('/api/local-trials/{run_id}')
     def status(run_id: str): return service.status(run_id)

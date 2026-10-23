@@ -1,93 +1,73 @@
-> **2026-10-21：当前实现与迁移入口**
-> 业务调用已统一 Genie One；轻量模型仅做分流和任务信息提取；保存的 SQL 直接复用。
-> 公司内网部署、个人 OAuth 与权限验收：[部署说明](business-ai-hub/README-DEPLOY.md)。
-> 已下载的旧 Workspace 源码、Agent 知识与 Metric View 定义：[迁移清单](migration/README.md)。
-> 云端导出是历史参考；运行当前维护目录，不执行归档配置。公司环境尚未部署或验收。
-
 # Business AI Hub
 
-Databricks Workspace exports preserved in baseline Git tags for continued development. Business data is simulated, as confirmed by the project owner. The original directory structure is retained; active development builds on the existing application.
+2026-10-23：基于现有Databricks项目持续开发。当前业务统一调用Genie One，轻量模型负责分流/任务提取，已审核的条件SQL可直接重复执行。公司环境尚未部署或完成真实权限验收。
 
-Milestone 2B is implemented on the development branch: natural-language draft proposals through a configurable model adapter, editable review/save flow, improved schedule controls, and separate draft statistics. See [implementation, local checks and model setup](docs/MILESTONE-2B.md). Original export versions remain recoverable through the baseline tags; application files now include 2B changes.
+## 公司电脑：Git + Python单人试用
 
-Direct Gmail delivery, team-installed email templates and standard-SQL CSV exports are also implemented locally, disabled pending project OAuth and approved rollout. See [email delivery and local preview](docs/EMAIL-DELIVERY.md). CSV and sending never invoke an agent.
+仓库包含编译网页，普通运行不需要Node、Docker或Databricks CLI。需要Python 3.11+（建议3.11/3.12）、公司允许的依赖源、浏览器和公司Databricks网络访问。
 
-## Product direction: one continuous conversation
+Windows PowerShell，在项目根目录：
 
-The primary experience must unify AI analysis and natural-language task creation in the same ongoing conversation. A user can investigate business data, then say “make this a weekly task” without re-entering the preceding context. Keep the dedicated task-creation UI/API as a shortcut and internal capability, not a separate long-term conversation experience.
-
-- Carry forward the discussed brand/scope, metric definitions, comparison periods, thresholds and selected Agent into an editable task proposal. Ask only for unresolved information; disclose assumptions.
-- Show the proposal and its confirmation in the conversation. Explicit saving updates My Tasks; activation remains a separate explicit action and does not start a Job by itself.
-- Share configuration validation and persistence across both entry points. A unified conversation does not require collapsing all backend capabilities into one endpoint.
-- Local conversation integration carries recent discussion into an editable proposal card, saves explicitly from chat, and refreshes My Tasks. The optional unified workflow now uses one structured model call for both semantic routing and draft extraction. Analysis, task, mixed and clarification paths share the conversation; dependent task drafts wait for analytical context. The dedicated task shortcut remains available. See [workflow and company Workspace handoff](docs/CONVERSATION-WORKFLOW.md). The complete user path still needs live acceptance against installed business definitions.
-- Analysis prompts and business templates belong to the other team. Standard SQL exports CSV and ordinary code delivers email; neither operation should spend Agent calls.
-
-Local draft review/activation and Genie-backed trigger SQL generation/testing are now available in the local test server. See [the trigger SQL workflow and its execution boundary](docs/CONDITION-SQL.md). Cloud execution remains paused.
-
-## Permission architecture and Genie One integration
-
-Interactive business queries should run with verified end-user authorization (OBO), so Unity Catalog table grants, row filters and column masks apply to the person asking. A shared App Service Principal gives every caller the same data permissions and is not a substitute for user isolation. Local CLI testing also represents only one identity.
-
-Hub has a separate authorization responsibility for task definitions, SQL previews, generated reports/CSV and conversation history. The backend must derive owner/group scope from trusted login identity, validate each read/write/download and bind conversation IDs to that identity. Existing editable `owner` metadata and frontend visibility are not access controls. This multiuser authorization layer is not yet implemented; the current development instance is single-user.
-
-The agreed interim policy is **creator-scoped execution**: record the task creator from verified login identity and use that identity's effective permissions for condition queries, report generation and SQL/CSV exports. Revalidate permissions at execution time rather than permanently retaining the creator's creation-time grants. The execution identity must not change implicitly when another user edits a task. The current executor has not yet implemented per-task creator delegation; editable `owner` text is not this binding. If authorized creator execution is unavailable, fail rather than use a more privileged shared identity. Browser login tokens must not become long-lived scheduler credentials.
-
-Generate one report/artifact set per task run and send it to the creator-confirmed recipient list. Recipients need not have Databricks accounts; recipient-specific querying and N report variants are deferred. Email distribution is an explicit sharing action and does not confer direct table access. If people share one login, Hub can enforce that account's permissions but cannot distinguish the individual humans behind it. Before multiuser rollout, verify both data restrictions and saved-artifact access with users from different permission groups.
-
-`business-ai-hub/genie_one_mcp.py` provides an identity-scoped, schema-discovered MCP transport using SDK credentials and the MCP Python SDK. `scripts/check-genie-one.py` only lists tools. The local workflow includes Genie One analysis with single-ask/serial-poll handling and SDK-derived local-user conversation ownership. It is off by default; the owner explicitly enabled interactive local testing on 2026-10-21 through `--enable-genie-one-chat`. No assistant-initiated inference was used for that enablement. Native scheduling restrictions and production OBO/ACL remain unverified; analytical prompts and local routing guards are not an upstream capability restriction. The existing `/api/chat` and task conditions/reports retain A1/A2. No provider fallback or permission change is automatic.
-
-On 2026-10-21, authenticated tools/list succeeded in the current Workspace under the existing CLI profile. All four expected tools and their input/output schemas were available. The advertised polling schema includes optional `query_items[].sql`; live answers, SQL availability and semantic accuracy remain untested. Zero inference/tool-execution calls were made during discovery. This does not establish App/OBO/Job identity permissions.
-
-## Components
-
-| Directory | Purpose |
-| --- | --- |
-| `business-ai-hub/` | React/TypeScript/Vite frontend and FastAPI backend; Databricks App deployment root |
-| `business-task-manager-v1/business-task-manager-v1/` | Python/Spark task executor, four YAML task definitions, prompts, templates, Outbox SQL |
-| `Douyin_Business_Cockpit/Douyin_Business_Cockpit/snapshots/v1_2026-10-13/` | Exported snapshot placeholders; all five files are empty |
-| `database/` | Registry DDL provided by the owner; preserved for reference, not executed |
-| `docs/` | Baseline audit and export checksums |
-
-## Current architecture
-
-```mermaid
-flowchart LR
-  UI[React UI] --> API[FastAPI]
-  API --> Genie[Genie A1 / A2]
-  API --> YAML[Workspace task YAML]
-  API --> Registry[Delta task registry: draft / active / paused]
-  Job[External Databricks Job] --> Engine[Task Manager]
-  YAML --> Engine
-  Engine --> Genie
-  Registry --> Engine
-  Engine --> History[Delta run / report history]
-  History --> API
-  Engine --> Outbox[Delta Outbox]
-  Outbox --> Alert[External SQL Alert / email]
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+Copy-Item config/company-local.yaml config/company-local.private.yaml
+.\.venv\Scripts\python.exe scripts/run-hub.py --config config/company-local.private.yaml
 ```
 
-Milestone 2C is implemented locally: Registry activation/pause/edit workflow, executor integration, execution/report history, and the existing Outbox notification adapter. See [2C scope, validation and rollout requirements](docs/MILESTONE-2C.md). Execution is disabled by default. The existing cloud App and paused Job have not been updated; cloud execution and email delivery remain unverified.
+打开 http://127.0.0.1:8765/ 。SDK会打开公司Databricks登录；无须提供密码/Token给代码或聊天工具。TASK_PARSER_ENDPOINT暂为空，填入获批的公司模型名称后才可自然语言生成，手工草稿可先用。登录/资源权限仍由公司控制。
 
-The original Job/Alert settings are not exported as deployable configuration. Read-only discovery confirmed the existing Job is still PAUSED, runs daily at 09:00:21 Asia/Shanghai, and has one concurrent run.
+完整Git克隆/更新步骤见 [GIT-SYNC.md](docs/GIT-SYNC.md)，本机准备见 [START-HERE.md](docs/company-transfer/START-HERE.md)。已有ZIP目录先保留，首次Git克隆用新文件夹。
 
-## Baseline
+## 功能与范围
 
-- Tag `databricks-hub-export-2026-10-20` preserves the original 14-file Hub export.
-- A subsequent commit adds the external exports, supplied Registry DDL, this index, ignore rules, and audit records.
-- `docs/export-sha256.json` records the hashes of all 45 original exported files, including empty files and Databricks manifests. `.DS_Store` is excluded.
+- 连续业务对话，分析/任务/混合请求分流，可视化流程与耗时。
+- 自然语言和手工创建草稿、可编辑预览、保存、审核启用/暂停。
+- Genie One生成条件SQL；参数化只读测试及重复执行；定性AI条件与明确的未知/失败结果。
+- 手动试运行、运行记录、报告历史、邮件预览与明确确认发送；不触发就不生成报告。
+- Apps用户OBO、任务/报告按创建者隔离，以及原生Job Run as创建者的后台入口代码。
+- 本地测试计时/已知调用与用量记录；未知Genie内部token、DBU和费用不记作0。
 
-## Personal local testing
+公司模型、正式指标、模板、邮件和真实双用户权限需现场接入验收。CSV受控导出尚需适配；接口或模板代码不代表公司已可用。所有周期调度和自动发信均未默认开启。
 
-Run `python scripts/dev-local.py` after installing backend development requirements and building the frontend, then open **http://127.0.0.1:8765**. Drafts and review state are saved to a separate local SQLite database. Explicit SQL-tool clicks may query Genie/Databricks; cloud Registry writes, Jobs and mail remain disabled. Real model parsing is opt-in and requires separate authorization. The earlier `scripts/preview-local.py` is UI-only and cannot save. See [local testing details](docs/EMAIL-DELIVERY.md).
+## 配置选择
 
-The local launcher now automatically records test-stage timings and observed model/MCP/SDK/SQL calls to a **separate local metrics SQLite database**. It does not require Codex/browser monitoring or issue extra provider calls. The workflow inspector's **导出全部测试数据（JSON）** downloads the persisted records. Unknown provider-internal tokens, DBUs and prices remain unknown. See [recording scope and interpretation](docs/CONVERSATION-WORKFLOW.md#automatic-test-measurements).
+| 文件 | 用途 |
+| --- | --- |
+| config/local.yaml | 原开发电脑/个人Workspace，保持原设置 |
+| config/company-local.yaml | 公司Workspace＋本机单人浏览器登录＋独立SQLite；当前先试这条 |
+| config/company.yaml | 内网多人服务器，需HTTPS、个人OAuth及独立存储身份 |
+| config/company-apps.yaml | Databricks Apps平台SSO/OBO与持久元数据；待批准部署 |
 
-## Development entry points
+local描述本机运行/存储方式，不表示连接个人Workspace。公司电脑用company-local配置，不用原local.yaml。多人/长期后台托管不能直接复用单人localhost入口。
 
-Frontend and backend dependencies are declared in the exported manifests. From `business-ai-hub/`, `npm install` followed by `npm run build` runs TypeScript checks and builds `frontend/dist`. The backend requirements are in `business-ai-hub/requirements.txt`; local backend startup is `uvicorn app:app --host 127.0.0.1 --port 8000`. Databricks credentials and resource permissions are required for the remote API routes. Do not use CRUD or chat calls as a local smoke test against the live Workspace.
+## 当前架构
 
-Task Manager's `main.py` requires a Databricks Spark runtime after explicitly enabling execution. It consumes enabled YAML and active/enabled Registry tasks, can call Genie, and writes run history and Outbox. Its default `execution.enabled: false` guard stops before creating Spark. Do not enable or invoke it remotely until execution is explicitly authorized.
+```mermaid
+flowchart TD
+  UI[网页对话 / 任务 / 报告] --> API[FastAPI + 创建者校验]
+  API --> Router[轻量模型：分流与任务字段]
+  API --> Business[用户身份：Genie One / 已保存SQL]
+  API --> Store[本机SQLite 或 公司元数据表]
+  Job[原生Job：Run as创建者] --> Token[本次运行凭据换取App令牌]
+  Token --> Apps[Apps平台用户授权]
+  Apps --> API
+```
 
-`business-ai-hub/app.yaml` starts Uvicorn using `DATABRICKS_APP_PORT`. The root npm workspace manifest inside that app directory builds the frontend. The monorepo root is not the App deployment directory.
+原生Job→Apps链路不要求员工持续登录，但依赖可用的App/计算资源与公司令牌交换支持，尚待真实验收。只在公司电脑运行的localhost不能作为Job回调地址。
 
-See [baseline audit](docs/BASELINE-AUDIT.md) for limitations and next development steps. Original deployment documents are historical and contain statements that differ from the exported configuration.
+## 文档与示例
+
+- [统一审阅入口](docs/REVIEW-INDEX.md)
+- [完整测试建议](docs/PLATFORM-TEST-PLAN.md)：口径、Genie One、各功能事件、权限、调度、邮件和资源
+- [OBO与Task权限](docs/OBO-AND-TASK-IDENTITY.md)、[后台Job实现与配置](docs/CREATOR-JOBS.md)
+- [可分享的权限示例代码](examples/authorization/README.md)
+- [公司接入准备](docs/company-transfer/START-HERE.md)、[界面审阅](docs/UI-REVIEW.md)
+
+## 开发与版本保存
+
+前端源码在business-ai-hub/frontend；修改前端后运行npm构建并提交最新dist。仅发布网页dist作为Python直用所需的生成文件纳入Git；不提交node_modules、虚拟环境、凭据、本机数据、报告/邮件或遥测日志。
+
+根目录requirements.txt/app.yaml与deployment/databricks-apps中的运行模板对应。首次部署Apps需完整项目根目录，不只上传后端子目录。
+
+原始导出及基线标签保持保留；[旧Workspace迁移归档](migration/README.md)仅供历史参考，不导入公司知识或自动执行其中的Job/Alert/建表配置。

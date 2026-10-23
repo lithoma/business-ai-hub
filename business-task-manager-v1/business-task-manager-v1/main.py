@@ -5,7 +5,7 @@ import argparse
 import logging
 from pathlib import Path
 
-from task_engine import TaskManager, read_yaml
+from task_engine import TaskManager, read_settings
 
 
 def main() -> None:
@@ -20,7 +20,7 @@ def main() -> None:
 )
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    if read_yaml(Path(args.settings)).get('execution', {}).get('enabled') is not True:
+    if read_settings(Path(args.settings)).get('execution', {}).get('enabled') is not True:
         raise RuntimeError('Execution disabled; no Spark session or task created')
     from pyspark.sql import SparkSession
     spark = SparkSession.builder.getOrCreate()

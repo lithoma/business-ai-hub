@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { EMPTY_FORM, buildCreatePayload, formError, proposalToForm, scheduleDescription, taskCounts } from './taskDrafts'
+import { EMPTY_FORM, SCHEDULE_HOURS, buildCreatePayload, formError, proposalToForm, scheduleDescription, taskCounts } from './taskDrafts'
 
 describe('draft statistics', () => {
   it('counts drafts separately even when legacy enabled flag is true', () => {
@@ -15,15 +15,17 @@ describe('draft statistics', () => {
 describe('schedule editing', () => {
   it('round trips weekly schedule, timezone and review without losing condition', () => {
     const form = { ...EMPTY_FORM, task_id: 'a', name: 'weekly', schedule_freq: 'weekly' as const,
-      schedule_weekday: 'sunday', schedule_time: '18:30', schedule_timezone: 'UTC',
+      schedule_weekday: 'sunday', schedule_time: '18:00', schedule_timezone: 'UTC',
       trigger_type: 'agent' as const, trigger_prompt: 'GMV下降超过15%',
       draft_review: { original_request: '如果下降15%', conditional: true, assumptions: [], warnings: [], missing_information: [] },
     }
     const payload = buildCreatePayload(form)
-    expect(payload.schedule.cron).toBe('30 18 * * 0')
+    expect(payload.schedule.cron).toBe('0 18 * * 0')
     expect(payload.enabled).toBe(false)
     expect(proposalToForm(payload)).toEqual(form)
-    expect(scheduleDescription(payload.schedule)).toBe('每周日 18:30 · UTC')
+    expect(scheduleDescription(payload.schedule)).toBe('每周日 18:00 · UTC')
+    expect(SCHEDULE_HOURS).toHaveLength(24)
+    expect(SCHEDULE_HOURS.every(time => time.endsWith(':00'))).toBe(true)
   })
 
   it('uses a start date for intervals instead of misleading monthly cron', () => {
@@ -38,7 +40,7 @@ describe('schedule editing', () => {
     const valid = { ...EMPTY_FORM, task_id: 'a', name: 'name' }
     expect(formError(valid)).toBeNull()
     for (const changes of [
-      { schedule_time: '25:00' }, { schedule_timezone: 'Bogus' },
+      { schedule_time: '25:00' }, { schedule_time: '09:30' }, { schedule_timezone: 'Bogus' },
       { schedule_freq: 'interval' as const, interval_days: 1.5 },
       { draft_review: { original_request: '如果下降', conditional: true, assumptions: [], warnings: [], missing_information: [] } },
     ]) expect(formError({ ...valid, ...changes })).not.toBeNull()

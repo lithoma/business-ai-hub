@@ -1,0 +1,44 @@
+version: 1
+environment: company
+# Databricks Apps only. Platform SSO remains mandatory.
+# Business calls use platform-forwarded USER credentials; only task metadata uses
+# the App service principal. Never fall back to shared App business permissions.
+env:
+  DATABRICKS_HOST: https://adb-7405618086077365.5.azuredatabricks.net
+  SQL_WAREHOUSE_ID: 540a674067e832d2
+  HUB_AUTH_MODE: databricks_app_obo
+  HUB_PUBLIC_ORIGIN: '' # Fill the HTTPS URL assigned to the new company App.
+  TASK_REGISTRY_TABLE: '' # Confirm catalog.schema.business_task_registry_v1.
+  TASK_RUNS_TABLE: '' # Confirm catalog.schema.business_task_runs_v1.
+  TASK_PARSER_ENDPOINT: '' # Existing company lightweight model; optional for manual creation.
+  CONVERSATION_ROUTER_ENDPOINT: ''
+  HUB_INCLUDE_YAML_TASKS: false # Do not import personal demo tasks or knowledge.
+  HUB_WORKFLOW_ENABLED: true
+  GENIE_ONE_ENABLED: false # Enable after company resource permission smoke tests.
+  TASK_CONDITION_SQL_ENABLED: false
+  TASK_EXECUTION_ENABLED: false
+  TASK_EMAIL_ENABLED: false
+  HUB_MANUAL_RUNS_ENABLED: false
+  HUB_CREATOR_JOBS_ENABLED: false # Enable only after one approved creator Job smoke test.
+  HUB_CREATOR_JOB_BINDINGS_FILE: config/creator-job-bindings.json
+  TASK_SCHEDULER_MODE: per_task
+task_manager:
+  workspace_host: https://adb-7405618086077365.5.azuredatabricks.net
+  catalog: ''
+  schema: ''
+  schedule:
+    time: '09:00'
+    timezone: Asia/Shanghai
+    business_date_offset_days: 1
+  registry:
+    enabled: true
+    table: ''
+  execution:
+    enabled: false
+    runs_table: ''
+  notification:
+    provider: gmail
+    email:
+      enabled: false
+      from_address: ''
+      allowed_recipients: []

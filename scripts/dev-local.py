@@ -6,6 +6,7 @@ Real parser access is opt-in. A finite budget is the default; interactive use
 without a call limit requires separate explicit user authorization.
 """
 import argparse
+from contextlib import contextmanager
 from datetime import datetime, timezone
 import json
 import os
@@ -22,7 +23,13 @@ ENGINE = ROOT / 'business-task-manager-v1' / 'business-task-manager-v1'
 
 def build_app(database, *, endpoint='', profile='business-ai-hub', model_limit=3, interactive_analysis=False,
               conversation_workflow=False, analysis_provider='genie_one', genie_one_chat=False,
-              manual_trials=False, trial_recipient=''):
+              manual_trials=False, trial_recipient='', local_scheduler=False):
+    if local_scheduler and not manual_trials:
+        raise ValueError('Local scheduler requires the shared run service (--manual-trials)')
+    from environment_config import selected_profile, task_manager_settings
+    selected=selected_profile()
+    if selected and selected['environment'] != 'local':
+        raise ValueError('公司配置不能用本地测试启动器，请使用 scripts/run-hub.py。')
     os.environ.setdefault('SQL_WAREHOUSE_ID','a54c7a1cd51e6901')
     os.environ['HUB_AUTH_MODE'] = 'local_cli'
     os.environ['HUB_LOCAL_PROFILE'] = profile
@@ -30,6 +37,7 @@ def build_app(database, *, endpoint='', profile='business-ai-hub', model_limit=3
     os.environ['TASK_EXECUTION_ENABLED'] = 'true'
     os.environ['TASK_CONDITION_SQL_ENABLED'] = 'true'
     os.environ['TASK_EMAIL_ENABLED'] = 'false'
+    os.environ['HUB_MANUAL_RUNS_ENABLED'] = 'true' if manual_trials else 'false'
     os.environ['HUB_LOCAL_WORKFLOW'] = 'true' if conversation_workflow else 'false'
     os.environ['CHAT_ANALYSIS_PROVIDER'] = analysis_provider
     os.environ['GENIE_ONE_ENABLED'] = 'true' if genie_one_chat else 'false'
@@ -65,7 +73,8 @@ def build_app(database, *, endpoint='', profile='business-ai-hub', model_limit=3
             connection.execute('ALTER TABLE task_runs ADD COLUMN config_json TEXT')
     def local_sql(statement, parameters=None):
         # Thin SQL dialect compatibility for the production App's CRUD, with real SQLite persistence.
-        statement = statement.replace(backend.REGISTRY_TABLE, 'task_registry').replace('workspace.douyin.business_task_runs_v1', 'task_runs')
+        statement = statement.replace(backend.REGISTRY_TABLE, 'task_registry').replace(
+            os.getenv('TASK_RUNS_TABLE','workspace.douyin.business_task_runs_v1'),'task_runs').replace('workspace.douyin.business_task_runs_v1', 'task_runs')
         statement = re.sub(r'CAST\((created_at|updated_at) AS STRING\)', r'\1', statement, flags=re.I)
         statement = statement.replace('current_timestamp()', 'dev_now()')
         with sqlite3.connect(database, timeout=10) as connection:
@@ -86,6 +95,7 @@ def build_app(database, *, endpoint='', profile='business-ai-hub', model_limit=3
                 return result
             return [{'num_affected_rows': cursor.rowcount}]
     def local_tasks():
+        if os.getenv('HUB_INCLUDE_YAML_TASKS','true').lower()!='true':return []
         tasks = []
         for path in sorted((ENGINE / 'tasks').glob('*/config.yaml')):
             task = yaml.safe_load(path.read_text(encoding='utf-8'))
@@ -99,7 +109,7 @@ def build_app(database, *, endpoint='', profile='business-ai-hub', model_limit=3
             return local_sql(statement,parameters)
     backend._exec_sql = measured_local_sql
     backend._load_task_configs = local_tasks
-    backend._ws_read_yaml = lambda path: yaml.safe_load((ENGINE / 'settings.yaml').read_text(encoding='utf-8')) if path.endswith('/settings.yaml') else cloud_disabled()
+    backend._ws_read_yaml = lambda path: task_manager_settings(yaml.safe_load((ENGINE / 'settings.yaml').read_text(encoding='utf-8'))) if path.endswith('/settings.yaml') else cloud_disabled()
     if not interactive_analysis: backend._ask_genie = cloud_disabled
     backend._workspace = cloud_disabled
     # Condition tools only issue Genie Chat / bounded SELECT calls, never CRUD SQL.
@@ -146,7 +156,7 @@ def build_app(database, *, endpoint='', profile='business-ai-hub', model_limit=3
         from report_email import build_message, email_address
         spec=importlib.util.spec_from_file_location('hub_trial_cli',ROOT/'scripts/test-local-tasks.py')
         trial_cli=importlib.util.module_from_spec(spec);spec.loader.exec_module(trial_cli)
-        settings=yaml.safe_load((ENGINE/'settings.yaml').read_text())
+        settings=task_manager_settings(yaml.safe_load((ENGINE/'settings.yaml').read_text()))
         state=database.parent/'manual-task-tests'
         def trial_condition(task,day):
             trigger=task['trigger'];review=task['report'].get('condition_sql' if trigger['type']=='sql' else 'condition_agent',{})
@@ -189,8 +199,41 @@ def build_app(database, *, endpoint='', profile='business-ai-hub', model_limit=3
             result=json.loads(result_file.read_text()) if result_file.is_file() else {}
             timings={key:result[key] for key in ('condition_seconds','report_seconds','duration_seconds') if key in result}
             service.import_report(file.parent.name,json.loads(file.read_text()),timings)
-        register_routes(backend.app,service)
+        register_routes(backend.app,service,legacy_only=True)
         backend.app.state.local_trials=service
+        from run_service import RunRepository,RunService
+        # Single-process dispatch ownership is shared by canonical API and scheduler.
+        # Keep old records/previews available via the explicit legacy adapter.
+        backend._exec_sql('''CREATE UNIQUE INDEX IF NOT EXISTS hub_run_slot
+            ON workspace.douyin.business_task_runs_v1(source,task_id,scheduled_slot)
+            WHERE source IN ('manual','scheduled')''')
+        backend.app.state.run_service=RunService(
+            RunRepository(backend._exec_sql,os.getenv('TASK_RUNS_TABLE','workspace.douyin.business_task_runs_v1'),sqlite=True),
+            backend._load_registry_tasks,trial_condition,trial_report,trial_preview,
+            (lambda raw:trial_cli.gmail(sender).send(raw)) if sender and recipient else None,
+            sender=sender,recipient=recipient,mode='single_user_local',legacy=service)
+        if local_scheduler:
+            from scheduler_loop import SchedulerLoop
+            from hub_auth import _context,current_identity,verified_identity
+            from databricks.sdk import WorkspaceClient
+            @contextmanager
+            def execution_scope():
+                manager=backend.app.state.auth
+                with manager.lock:
+                    if manager.mode!='local_cli':raise PermissionError('Local scheduler requires local CLI identity')
+                    if manager.local is None:
+                        manager.local=verified_identity(WorkspaceClient(profile=profile),'local_cli')
+                    identity=manager.local
+                marker=_context.set(identity)
+                try:yield
+                finally:_context.reset(marker)
+            scheduler=SchedulerLoop(backend.app.state.run_service,execution_scope,
+                lambda task:current_identity(),interval_seconds=60)
+            backend.app.state.scheduler=scheduler
+            @backend.app.on_event('startup')
+            async def start_scheduler():scheduler.start(enabled=True)
+            @backend.app.on_event('shutdown')
+            async def stop_scheduler():scheduler.stop()
     @backend.app.middleware('http')
     async def local_scope(request, call_next):
         if request.url.path in ('/api/chat','/api/conversation/analysis') and not interactive_analysis:
@@ -229,16 +272,20 @@ def main():
     parser.add_argument('--enable-genie-one-chat', action='store_true', help='Explicitly enable user-requested local Genie One analytics testing; no automatic model smoke test')
     parser.add_argument('--manual-trials', action='store_true', help='Enable explicit local report trials; emails require separate preview and confirmation')
     parser.add_argument('--trial-recipient', default='', help='Fixed authorized recipient for manual mail tests only')
+    parser.add_argument('--enable-local-scheduler', action='store_true',
+                        help='Explicit opt-in: every 60s execute due ACTIVE tasks with the CLI identity; may query/call models, never auto-email')
     args = parser.parse_args()
     if not 0 <= args.model_limit <= 10: parser.error('Model limit must be 0–10')
     if args.interactive_model and not args.parser_endpoint: parser.error('--interactive-model requires --parser-endpoint')
+    if args.enable_local_scheduler and not args.manual_trials:parser.error('--enable-local-scheduler requires --manual-trials')
     if args.enable_genie_one_chat and not (args.analysis_provider == 'genie_one' and args.interactive_analysis and args.conversation_workflow):
         parser.error('--enable-genie-one-chat requires --analysis-provider genie_one, --interactive-analysis and --conversation-workflow')
     application = build_app(args.database, endpoint=args.parser_endpoint, profile=args.profile,
                             model_limit=None if args.interactive_model else args.model_limit,
                             interactive_analysis=args.interactive_analysis,
                             conversation_workflow=args.conversation_workflow, analysis_provider=args.analysis_provider,
-                            genie_one_chat=args.enable_genie_one_chat,manual_trials=args.manual_trials,trial_recipient=args.trial_recipient)
+                            genie_one_chat=args.enable_genie_one_chat,manual_trials=args.manual_trials,trial_recipient=args.trial_recipient,
+                            local_scheduler=args.enable_local_scheduler)
     import uvicorn
     uvicorn.run(application, host='127.0.0.1', port=args.port)
 

@@ -14,7 +14,7 @@ it('requires trial confirmation, shows real phases/results, and sends only after
       : url.endsWith('/send') ? { notification_status:'EMAIL_ACCEPTED' }
       : { run_id:'fixture',phase:'completed',status:'REPORT_CREATED',report_text:'fixture report',trigger_reason:'fixture condition',timings:{condition_seconds:1,report_seconds:2} }
   })
-  render(<TaskTrial task={{ task_id:'fixture',name:'fixture task',updated_at:'v1' }} settings={{ enabled:true }} request={request as never} onViewReports={vi.fn()}/>)
+  render(<TaskTrial task={{ task_id:'fixture',name:'fixture task',updated_at:'v1' }} settings={{ enabled:true,api:'runs' }} request={request as never} onViewReports={vi.fn()}/>)
   const user=userEvent.setup()
   await user.click(screen.getByRole('button',{name:'试运行一次'}))
   await user.type(screen.getByLabelText('试运行业务日期'),'2025-06-24')
@@ -25,6 +25,7 @@ it('requires trial confirmation, shows real phases/results, and sends only after
   await screen.findByText('fixture report')
   expect(calls.filter(url=>url.endsWith('/trial'))).toHaveLength(1)
   expect(calls.some(url=>url.endsWith('/send'))).toBe(false)
+  expect(calls).toContain('/api/runs/fixture')
   await user.click(screen.getByRole('button',{name:'预览邮件'}))
   await screen.findByText(/recipient@example.com/)
   expect((screen.getByRole('button',{name:'确认发送一次'}) as HTMLButtonElement).disabled).toBe(true)

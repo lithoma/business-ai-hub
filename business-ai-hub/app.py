@@ -25,6 +25,9 @@ from databricks.sdk.service.sql import ExecuteStatementRequestOnWaitTimeout, Sta
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, model_validator
 
+from environment_config import apply_selected_profile, task_manager_settings
+apply_selected_profile()
+
 from task_drafts import (
     GenerateRequest, ReportConfig, ScheduleConfig, TriggerConfig,
     extract_proposal, has_condition, review_proposal,
@@ -74,6 +77,9 @@ def _workspace() -> WorkspaceClient:
 
 def _storage_workspace():
     global _ws
+    if os.getenv('HUB_AUTH_MODE') in ('databricks_app','databricks_app_obo'):
+        from apps_auth import app_workspace
+        return app_workspace()
     if _ws is None:
         profile = os.getenv('HUB_STORAGE_PROFILE')
         if not profile:
@@ -95,6 +101,8 @@ def _ws_read_yaml(path: str) -> dict[str, Any]:
     text = target.read_text(encoding='utf-8')
 
     result = yaml.safe_load(text)
+    if target.name == "settings.yaml":
+        result = task_manager_settings(result)
 
     if not isinstance(result, dict):
         raise ValueError(f"Expected YAML mapping: {path}")
@@ -115,6 +123,7 @@ def _ws_list_children(path: str) -> list[str]:
 def _load_task_configs() -> list[dict[str, Any]]:
     """Read the four existing task configs directly from Workspace."""
 
+    if os.getenv('HUB_INCLUDE_YAML_TASKS','true').lower()!='true':return []
     task_names = [
         "competitor_risk",
         "daily_sales",
@@ -705,6 +714,11 @@ def chat(req: ChatRequest):
 
 
     # React frontend
+from run_routes import register_run_routes
+register_run_routes(app,lambda statement,parameters=None:_exec_sql(statement,parameters),
+    lambda:_load_registry_tasks(),lambda:_ws_read_yaml(f'{TASK_MANAGER_PATH}/settings.yaml'),
+    TASK_MANAGER_PATH,SQL_WAREHOUSE_ID)
+
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
 

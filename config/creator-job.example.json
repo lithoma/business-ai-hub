@@ -1,0 +1,11 @@
+{
+  "workspace_host": "https://adb-7405618086077365.5.azuredatabricks.net",
+  "app_origin": "",
+  "app_client_id": "",
+  "creator_subject": "",
+  "run_as_user_name": "",
+  "repo_root": "/Workspace/Shared/business-ai-hub-transfer",
+  "config_path": "/Workspace/Shared/business-ai-hub-transfer/config/creator-job.example.json",
+  "notebook_path": "/Workspace/Shared/business-ai-hub-transfer/scripts/creator-job-notebook",
+  "existing_cluster_id": ""
+}

@@ -29,6 +29,20 @@ def read_yaml(path: Path) -> dict[str, Any]:
     return result
 
 
+def read_settings(path):
+    settings=read_yaml(path)
+    import os
+    if os.getenv('HUB_CONFIG_FILE'):
+        # The transfer layout includes both source roots. No cloud files are read.
+        import sys
+        module_root=Path(__file__).resolve().parents[2]/'business-ai-hub'
+        if module_root.is_dir() and str(module_root) not in sys.path:sys.path.insert(0,str(module_root))
+        from environment_config import apply_selected_profile,task_manager_settings
+        apply_selected_profile()
+        return task_manager_settings(settings)
+    return settings
+
+
 def render(text: str, variables: dict[str, Any]) -> str:
     # Explicit placeholders avoid executing arbitrary Python from task config.
     for key, value in variables.items():
@@ -56,7 +70,7 @@ class TaskManager:
         self.creator_runner = creator_runner
         self.spark = spark
         self.root = settings_path.resolve().parent
-        self.settings = read_yaml(settings_path)
+        self.settings = read_settings(settings_path)
         self.agents = AgentClient(self.settings["agents"])
 
     def run(self, *, now=None, agents=None, store=None, publisher=None, mail_provider=None) -> dict[str, Any]:

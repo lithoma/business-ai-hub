@@ -1,0 +1,18 @@
+-- PROPOSAL ONLY. Administrator must confirm principal and target Schema first.
+-- Keep task/report metadata private to the server-side storage identity and approved admins.
+-- Check inherited catalog/schema SELECT/MODIFY before choosing this location.
+-- Do not revoke any existing broad grant automatically and do not grant ALL PRIVILEGES.
+
+GRANT USE CATALOG ON CATALOG `<CONFIRMED_CATALOG>` TO `<METADATA_SERVICE_PRINCIPAL>`;
+GRANT USE SCHEMA ON SCHEMA `<CONFIRMED_CATALOG>`.`<CONFIRMED_SCHEMA>` TO `<METADATA_SERVICE_PRINCIPAL>`;
+GRANT SELECT, MODIFY ON TABLE `<CONFIRMED_CATALOG>`.`<CONFIRMED_SCHEMA>`.`business_task_registry_v1` TO `<METADATA_SERVICE_PRINCIPAL>`;
+GRANT SELECT, MODIFY ON TABLE `<CONFIRMED_CATALOG>`.`<CONFIRMED_SCHEMA>`.`business_task_runs_v1` TO `<METADATA_SERVICE_PRINCIPAL>`;
+
+-- Separately use approved Warehouse permissions UI/API to grant this identity CAN_USE
+-- on 540a674067e832d2. Warehouse ACLs are not Unity Catalog SQL GRANT statements.
+-- Workspace assignment and OAuth M2M/approved SDK credentials are configured outside Git.
+-- Do not grant this identity business-table SELECT or substitute it for task creators.
+-- Business users need their own Warehouse/MCP/underlying-data access, but do not need
+-- raw access to these shared metadata tables merely to use the Hub UI.
+-- MCP service permissions are checked/managed using the supported MCP UI/API, not
+-- guessed SQL GRANT syntax for MCP_SERVICE.

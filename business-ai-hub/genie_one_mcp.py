@@ -232,5 +232,5 @@ def adapter_for_user(workspace=None):
     # Do not permit an injected storage or unrelated Workspace client.
     if client is not user.client:
         raise PermissionError('Business adapter must use the authenticated user client')
-    caller = Caller(user.key, 'local_user' if user.mode == 'local_cli' else 'obo_user')
+    caller = Caller(user.key, 'service_principal' if user.mode=='databricks_app' else 'local_user' if user.mode == 'local_cli' else 'obo_user')
     return GenieOneMCP(client, caller)

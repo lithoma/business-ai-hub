@@ -1,0 +1,9 @@
+{
+  "user_api_scopes": [
+    "iam.current-user:read",
+    "iam.access-control:read",
+    "ai-gateway",
+    "sql:restricted-query",
+    "model-serving"
+  ]
+}

@@ -19,13 +19,10 @@ class CreatorRunner:
         subject, workspace = security.get('creator_subject'), security.get('workspace')
         if not subject or not workspace or security.get('execution_authority')!='creator':
             raise PermissionError('Task lacks a trusted creator binding; explicit migration is required')
+        from task_authorization import verify_creator
         user = self.resolve_identity(workspace, subject)
-        if user is None or not owns(task,user):
-            raise PermissionError('Creator authorization unavailable, expired or mismatched')
-        # The broker's identity label alone is insufficient; verify the actual SDK user.
-        actual = verified_identity(user.client, 'obo_user')
-        if actual.key != user.key:
-            raise PermissionError('Resolved credential does not belong to task creator')
+        if user is None:raise PermissionError('Creator authorization unavailable')
+        user = verify_creator(task,user)
         marker = _context.set(user)
         try:
             trigger=task['trigger'];mode=trigger['type']

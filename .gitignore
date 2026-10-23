@@ -1,6 +1,8 @@
 .DS_Store
 node_modules/
 dist/
+!business-ai-hub/frontend/dist/
+!business-ai-hub/frontend/dist/**
 build/
 __pycache__/
 *.py[cod]
@@ -27,3 +29,8 @@ gmail-credentials*.json
 *.sqlite3
 *.sqlite3-wal
 *.sqlite3-shm
+
+# Machine-specific public overrides and transfer artifacts
+config/*.private.yaml
+*.zip
+*.zip.sha256

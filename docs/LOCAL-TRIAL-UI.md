@@ -1,5 +1,7 @@
 # Local report and email trials
 
+**2026-10-22 update:** canonical trial/preview/send APIs are now registered by FastAPI independently of this launcher. Run state and MIME previews persist in the existing run ledger; the old local routes remain as history adapters. Per-task schedule planning is available without starting a timer. See [current APIs, recovery rules and remaining integration](RUNS-AND-SCHEDULING.md). The historical launcher-only description below applies to the original trial implementation.
+
 The local platform now supports: save a task → review/activate locally → **试运行一次** → inspect the condition and report → **预览邮件** → explicitly **确认发送一次**. Trial buttons are on saved conversation cards and Registry tasks. Report history links to a preview of persisted manual reports, including the two already mailed reports; accepted/unknown sends cannot be repeated. Trials also work on complete draft configurations without starting the scheduler. They do not bypass the activation checks for scheduled execution.
 
 Start the existing loopback launcher with `--manual-trials --trial-recipient <authorized address>` in addition to the normal parser/analysis flags. Sender identity is read from the existing project Gmail authorization outside Git. No Google token is sent to the browser. Without this opt-in the deployed App has no trial/send routes and the frontend hides the controls. Current single-user testing uses the CLI identity, not App-SP/OBO authorization.

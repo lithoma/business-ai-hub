@@ -1,0 +1,31 @@
+{
+  "client_date": "2026-10-23",
+  "status": "focused_offline_checks_passed",
+  "checks_passed": 10,
+  "scope": [
+    "creator Run as notebook template remains paused, single concurrent run, no task retry",
+    "runtime creator identity is checked before App dispatch; no browser session dependency in client",
+    "App audience token exchange construction, bounded refresh, redirect rejection and no ambiguous POST retry",
+    "App Job binding and creator checks, disabled execution gates, shared identity rejection",
+    "canonical SQL/report pipeline and same-slot deduplication, no automatic mail",
+    "explicit deferred tasks drain in bounded batches without repeating completed runs",
+    "unchanged approved recurring task survives receipt freshness expiry while changed/unapproved task does not",
+    "existing scheduled creator identity and dispatch regressions",
+    "Apps per-user identity and public environment configuration regressions"
+  ],
+  "actual_job_created": false,
+  "job_started": false,
+  "schedule_enabled": false,
+  "company_resources_changed": false,
+  "real_token_exchange_attempted": false,
+  "real_model_calls": 0,
+  "business_sql_submissions": 0,
+  "emails_sent": 0,
+  "company_live_acceptance": "pending",
+  "limitations": [
+    "Fixture SDK and HTTP responses, real local SQLite execution ledger; not a company integration result.",
+    "Notebook Job context, audience token exchange, Apps forwarded user auth and Genie One downstream identity require company validation.",
+    "Job run IDs are correlation annotations, not server-verified native Jobs audit proof.",
+    "Automatic report email delivery is not enabled by this change."
+  ]
+}

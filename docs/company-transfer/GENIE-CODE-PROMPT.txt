@@ -1,0 +1,22 @@
+请检查现有Business AI Hub，不重建应用、不迁移Genie知识或业务数据。本次只读检查与准备建议，不创建/修改资源，不部署，不启动Job/Warehouse，不运行SQL或模型，不发邮件，不输出凭据。
+
+我会提供源码在你能访问的Workspace中的实际路径。若只在公司电脑Documents，你不能假定能读取它或GitHub。
+
+最新决定：先在公司电脑用Python单人试用。已附编译网页，不需Node；选择config/company-local.yaml。SDK external-browser登录公司账号，Task/报告存本机SQLite；不要求先建云端元数据表或注册自定义网站OAuth应用。
+
+先读company-preparation/START-HERE.md、config/company-local.yaml、scripts/run-hub.py、business-ai-hub/hub_auth.py、docs/CREATOR-JOBS.md和docs/PLATFORM-TEST-PLAN.md。源仓库说明位于docs/company-transfer，传输副本提供company-preparation。
+
+目标Host：https://adb-7405618086077365.5.azuredatabricks.net
+Warehouse：540a674067e832d2，dydf_dev_sqlwh；状态以后续只读检查为准。
+Genie One MCP：/ai-gateway/mcp-services/system.ai.genie_one_mcp
+SQL API：/api/2.0/sql/statements/
+
+请输出最小准备清单：
+1. Python依赖、公司网络、SDK浏览器登录/本机8020回调是否允许；不要求另装Databricks CLI，不借用开发账号。模型为空时手动任务仍可用。
+2. Genie One、用户USE CATALOG/SCHEMA、EXECUTE、Warehouse CAN_USE及业务数据权限中的已验证/未知项。可见不等于可调用；无权查看不等于不存在。不做实际调用验证。
+3. 只读列出已有轻量模型及已知权限，不调用模型。邮件授权独立说明，不复制原电脑Gmail凭据。
+4. 后续内网多人和Apps分别用company.yaml/company-apps.yaml；不要把单人localhost当成多人OBO，不为单人试用要求管理员注册网站OAuth。
+5. 后台已实现原生Job Run as创建者→Notebook本次凭据换取App audience令牌→App执行器，尚未公司验收；默认PAUSED、绑定为空、开关关闭。此入口依赖Apps；最终只用内网Python托管时，需另接可达且受保护的后台身份入口，不能只把URL改成127.0.0.1。
+6. 共享云端任务库以后获批时，才按确认Catalog.Schema准备无覆盖建表/最小授权建议，不执行原database开发FQN。
+
+本轮只返回：本机启动缺项、公司只读资源/权限结论、建议填的非敏感配置、后续管理员事项。不要执行线上更改或批量测试。

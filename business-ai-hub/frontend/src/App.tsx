@@ -6,10 +6,12 @@ import { WorkflowInspector, type WorkflowTrace } from './WorkflowInspector'
 import { EmailFields } from './EmailFields'
 import { Reports, TaskLifecycle } from './executionUi'
 import { TaskTrial, type TrialSettings } from './ManualTrial'
+import { FeatureOverview } from './FeatureOverview'
+import { SchedulePreview } from './SchedulePreview'
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { EMPTY_FORM, WEEKDAYS, buildCreatePayload, formError, proposalToForm, scheduleDescription, taskCounts, type DraftConfiguration, type DraftReview, type ScheduleFreq, type TaskFormState, type TriggerType } from './taskDrafts'
+import { EMPTY_FORM, WEEKDAYS, SCHEDULE_HOURS, buildCreatePayload, formError, proposalToForm, scheduleDescription, taskCounts, type DraftConfiguration, type DraftReview, type ScheduleFreq, type TaskFormState, type TriggerType } from './taskDrafts'
 import {
   Activity, ArrowRight, BarChart3, CalendarDays, Check, ChevronDown,
   Clock3, ClipboardList, FileText, Menu, MessageSquareText,
@@ -176,6 +178,7 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
   const [tasksError, setTasksError] = useState<string | null>(null)
   const [tasksFetched, setTasksFetched] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [showFeatures, setShowFeatures] = useState(false)
   const [agentPickerOpen, setAgentPickerOpen] = useState(false)
   const [showTaskForm, setShowTaskForm] = useState(false)
   const [editingVersion, setEditingVersion] = useState<string | null>(null)
@@ -202,7 +205,7 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
 
   useEffect(() => {
     let active = true
-    void apiRequest<TrialSettings>('/api/local-trials/settings')
+    void apiRequest<TrialSettings>('/api/runs/settings').catch(() => apiRequest<TrialSettings>('/api/local-trials/settings'))
       .then(value => { if (active) setTrialSettings({ ...value, enabled: value.enabled === true }) })
       .catch(() => { /* Trial routes exist only in an explicitly enabled local launcher. */ })
     void apiRequest<{ enabled?: boolean; analysis_provider?: string; router_model?: string; metrics_enabled?: boolean }>('/api/conversation/settings')
@@ -229,7 +232,11 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, tasksFetched])
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, sending, agent, page])
+  useEffect(() => {
+    const pane = bottomRef.current?.closest<HTMLElement>('.conversation')
+    // Follow new messages inside the conversation, without jumping the whole page.
+    if (pane) pane.scrollTop = pane.scrollHeight
+  }, [messages, sending, agent, page])
 
   useEffect(() => {
     function onPointerDown(event: MouseEvent) {
@@ -667,7 +674,7 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
     <div className="app-shell">
       {sidebarOpen && <button className="mobile-overlay" onClick={() => setSidebarOpen(false)} aria-label="关闭菜单" />}
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="brand"><span className="brand-mark"><Sparkles size={20} strokeWidth={2.3}/></span><div><strong>Business AI Hub</strong><span>智能业务工作台</span></div></div>
+        <div className="brand"><img className="haleon-logo" src="/brand/haleon-logo.svg" alt="Haleon" width="116" height="30"/><div><strong>Business AI Hub</strong><span>业务分析与自动化</span></div></div>
         <div className="nav-label">工作空间</div>
         <nav className="main-nav" aria-label="主导航">
           <button className={page === 'chat' ? 'nav-item active' : 'nav-item'} onClick={() => navigate('chat')}><MessageSquareText size={18}/><span>AI 分析</span>{page === 'chat' && <span className="nav-dot" />}</button>
@@ -675,7 +682,7 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
           <button className={page === 'reports' ? 'nav-item active' : 'nav-item'} onClick={() => navigate('reports')}><FileText size={18}/><span>分析报告</span>{page === 'reports' && <span className="nav-dot" />}</button>
         </nav>
         <div className="sidebar-bottom">
-          <div className="workspace-card"><div className="workspace-card-icon"><ShieldCheck size={17}/></div><div><strong>Databricks Workspace</strong><p>个人身份 · 按权限访问</p></div></div>
+          <div className="workspace-card"><div className="workspace-card-icon"><ShieldCheck size={17}/></div><div><strong>Databricks Workspace</strong><p>{authMode === 'databricks_app' ? 'App 共享业务身份 · 平台登录' : authMode === 'shared_trial' ? '共享开发身份 · 仅供试用' : '个人身份 · 按权限访问'}</p></div></div>
           <div className="sidebar-footer"><span className="online-indicator" />服务已连接 <span className="version">v0.4</span></div>
         </div>
       </aside>
@@ -684,19 +691,22 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
         <header className="topbar">
           <button className="mobile-menu" onClick={() => setSidebarOpen(true)} aria-label="打开菜单"><Menu size={21}/></button>
           <div className="breadcrumbs"><span>工作空间</span><span className="crumb-separator">/</span><strong>{page === 'chat' ? 'AI 分析' : page === 'tasks' ? '我的任务' : '分析报告'}</strong></div>
-          <div className="topbar-right"><span className="environment-pill"><span className="online-indicator"/> {authMode === 'local_cli' ? '本地用户测试' : '个人权限已连接'}</span><span title={userLabel}>{userLabel}</span><span className="avatar">AI</span></div>
+          <div className="topbar-right"><button className="secondary-button feature-help" onClick={() => setShowFeatures(true)}><ClipboardList size={14}/>功能与试用说明</button><span className="environment-pill"><span className="online-indicator"/> {authMode === 'databricks_app' ? '公司 App · 共享业务权限' : authMode === 'shared_trial' ? '共享试用 · 身份隔离暂停' : authMode === 'local_cli' ? '本地用户测试' : '个人权限已连接'}</span><span className="user-label" title={userLabel}>{userLabel}</span><span className="avatar">AI</span></div>
         </header>
+        {authMode === 'shared_trial' && <aside className="shared-trial-notice"><strong>共享试用</strong><span>所有访客共用测试任务与开发者数据权限。操作会改变共享草稿，真实提问会产生调用；没有自动调度，邮件仍需逐次预览确认。</span></aside>}
+        {authMode === 'databricks_app' && <aside className="shared-trial-notice"><strong>公司 App 试点</strong><span>通过平台登录访问；业务调用与任务库使用 App 的共享权限，不按个人账户隔离数据。自动调度和邮件需另外验收启用。</span></aside>}
+        {authMode === 'apps_obo' && <aside className="shared-trial-notice"><strong>个人数据权限</strong><span>查询和任务执行使用创建者的 Databricks 身份；任务与报告按创建者隔离。</span></aside>}
+        {showFeatures && <FeatureOverview onClose={() => setShowFeatures(false)} shared={authMode === 'shared_trial'} apps={authMode === 'databricks_app'} obo={authMode === 'apps_obo'} trialsEnabled={trialSettings.enabled} mailAvailable={trialSettings.mail_available === true}/>}
 
         {page === 'chat' && <section className="chat-page" aria-hidden={showTaskForm || undefined}>
-          <div className="page-heading chat-heading"><div><div className="eyebrow"><Sparkles size={14}/> BUSINESS INTELLIGENCE</div><h1>与数据对话</h1><p>用自然语言提问，让业务数据给出清晰的答案。</p></div></div>
+          <div className="page-heading chat-heading"><div><div className="eyebrow"><Sparkles size={14}/> BUSINESS INTELLIGENCE</div><h1>与数据对话</h1><p>分析业务表现，把需要持续关注的问题设为任务。</p></div></div>
           <div className="agent-row"><div className="agent-selector" ref={pickerRef}>
             <button className="agent-trigger" onClick={() => setAgentPickerOpen(!agentPickerOpen)} aria-expanded={agentPickerOpen} aria-haspopup="listbox" disabled={sending || workflow.analysis_provider === 'genie_one'}>
               <span className={`agent-icon ${agent === 'genie_one' ? 'sales' : 'market'}`}>{agent === 'genie_one' ? <BarChart3 size={20}/> : <Target size={20}/>}</span>
               <span className="agent-trigger-copy"><span className="agent-overline">当前分析助手</span><strong>{workflow.analysis_provider === 'genie_one' ? 'Genie One' : AGENTS[agent].name}</strong></span><ChevronDown size={17} className="chevron"/>
             </button>
             {agentPickerOpen && <div className="agent-menu" role="listbox" aria-label="选择分析助手">{(Object.keys(AGENTS) as Agent[]).map(key => <button key={key} role="option" aria-selected={key === agent} className="agent-option" onClick={() => chooseAgent(key)}><span className={`agent-icon ${key === 'genie_one' ? 'sales' : 'market'}`}>{key === 'genie_one' ? <BarChart3 size={18}/> : <Target size={18}/>}</span><span><strong>{AGENTS[key].name}</strong><small>{AGENTS[key].subtitle}</small></span>{key === agent && <Check size={17} className="option-check"/>}</button>)}</div>}
-          </div><span className="powered-by"><span className="online-indicator"/> {workflow.enabled ? '统一对话 · 分析与任务草稿' : 'Connected to Databricks Genie'}</span></div>
-          <button className="secondary-button" disabled={sending || taskGenerating || taskSaving || activeMessages.length === 0} onClick={() => { setMessages(previous => ({ ...previous, [agent]: [] })); setConversationIds(previous => ({ ...previous, [agent]: undefined })); setWorkflowConversationIds({}); setTraces([]); setSelectedTrace(undefined); setChatError(null) }}>新对话</button>
+          </div><span className="powered-by"><span className="online-indicator"/> {workflow.enabled ? '统一对话 · 分析与任务草稿' : 'Connected to Databricks Genie'}</span><button className="secondary-button" disabled={sending || taskGenerating || taskSaving || activeMessages.length === 0} onClick={() => { setMessages(previous => ({ ...previous, [agent]: [] })); setConversationIds(previous => ({ ...previous, [agent]: undefined })); setWorkflowConversationIds({}); setTraces([]); setSelectedTrace(undefined); setChatError(null) }}>新对话</button></div>
 
           <div className={workflow.enabled ? 'conversation-workspace' : undefined}>
           <div className="chat-panel">
@@ -739,9 +749,9 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
           </div>
         </section>}
 
-        {page === 'tasks' && <section className="content-page"><div className="page-heading"><div><div className="eyebrow"><Activity size={14}/> TASK AUTOMATION</div><h1>我的任务</h1><p>管理任务配置，创建草稿并预览。</p></div><div className="heading-actions"><button className="primary-button" onClick={openTaskForm}><Plus size={16}/>创建任务</button><button className="secondary-button" onClick={() => void fetchTasks()} disabled={tasksLoading}><RefreshCcw size={16} className={tasksLoading ? 'spin' : ''}/>刷新</button></div></div>
+        {page === 'tasks' && <section className="content-page"><div className="page-heading"><div><div className="eyebrow"><Activity size={14}/> TASK AUTOMATION</div><h1>我的任务</h1><p>管理任务配置；审核启用后仍需执行器运行，不会自动开始调度。</p></div><div className="heading-actions"><SchedulePreview request={apiRequest}/><button className="primary-button" onClick={openTaskForm}><Plus size={16}/>创建任务</button><button className="secondary-button" onClick={() => void fetchTasks()} disabled={tasksLoading}><RefreshCcw size={16} className={tasksLoading ? 'spin' : ''}/>刷新</button></div></div>
           <div className="metric-grid"><div className="metric-card"><span>任务总数</span><div><strong>{tasksFetched ? tasks.length : '—'}</strong><span className="metric-icon grey"><ClipboardList size={20}/></span></div><p>已配置的自动化任务</p></div><div className="metric-card"><span>已启用</span><div><strong>{tasksFetched ? counts.enabled : '—'}</strong><span className="metric-icon green"><Check size={20}/></span></div><p>配置已启用，不代表 Job 正在运行</p></div><div className="metric-card"><span>已停用</span><div><strong>{tasksFetched ? counts.disabled : '—'}</strong><span className="metric-icon amber"><Clock3 size={20}/></span></div><p>不含草稿</p></div><div className="metric-card"><span>草稿</span><div><strong>{tasksFetched ? counts.drafts : '—'}</strong><span className="metric-icon amber"><FileText size={20}/></span></div><p>审核启用后才可执行</p></div></div>
-          <div className="section-title"><div><h2>任务列表</h2><span className="count-pill">{tasksFetched ? tasks.length : '—'}</span></div><span className="section-subtitle">{trialSettings.enabled ? '来源：本机 SQLite 任务 + 导出的 YAML 配置' : '来源：Databricks Workspace · 实时配置'}</span></div>
+          <div className="section-title"><div><h2>任务列表</h2><span className="count-pill">{tasksFetched ? tasks.length : '—'}</span></div><span className="section-subtitle">{authMode === 'local_cli' || authMode === 'shared_trial' ? '本地试用任务 · 自动调度未开启' : '公司任务库 · 持久保存'}</span></div>
           {tasksLoading && <div className="content-state"><span className="spinner"/>正在加载任务…</div>}
           {tasksError && <div className="content-state error-state"><p>无法读取任务列表</p><small>{tasksError}</small><button className="secondary-button" onClick={() => void fetchTasks()}><RefreshCcw size={15}/>重试</button></div>}
           {!tasksLoading && !tasksError && tasksFetched && tasks.length === 0 && <div className="content-state"><ClipboardList size={26}/><p>暂无可显示的任务</p><small>请确认 Task Manager 配置目录中存在任务。</small></div>}
@@ -753,7 +763,7 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
             const isDraft = status === 'draft'
             const report = task.report && typeof task.report === 'object' ? task.report as ApiTask : {}
             const review = report.draft_review as DraftReview | null | undefined
-            return <div className="task-row" key={taskField(task, '_config_path', 'id', 'task_id') || index}><div className="task-identity"><div className="task-icon"><CalendarDays size={20}/></div><div><h3>{taskName(task, index).replaceAll('_', ' ')}</h3><p>{meta.description || `触发方式：${meta.trigger}`}</p>{review && <details className="saved-review"><summary>查看需求与生成说明</summary><ReviewNotes review={review}/></details>}</div></div><div className="task-details"><span><Clock3 size={15}/> {meta.schedule}</span><span><Activity size={15}/> {meta.trigger}</span><span className={`source-badge ${source}`}>{source === 'yaml' ? 'YAML' : 'Registry'}</span></div><div className="task-actions"><span className={`status-chip ${isDraft ? 'draft' : enabled === true ? 'enabled' : enabled === false ? 'disabled' : 'unknown'}`}><i/>{isDraft ? '草稿' : enabled === true ? '已启用' : enabled === false ? '已停用' : '状态未知'}</span>{source === 'registry' && <><TaskLifecycle task={task} request={apiRequest} onChanged={fetchTasks} onEdit={() => editDraft(task)}/><TaskTrial task={task} settings={trialSettings} request={apiRequest} onViewReports={() => navigate('reports',String(task.task_id))}/></>}{isDraft && <button className="icon-button delete" onClick={() => setDeleteTarget(task)} title="删除草稿"><X size={15}/></button>}</div></div>
+            return <div className="task-row" key={taskField(task, '_config_path', 'id', 'task_id') || index}><div className="task-identity"><div className="task-icon"><CalendarDays size={20}/></div><div><h3>{taskName(task, index).replaceAll('_', ' ')}</h3><p>{meta.description || `触发方式：${meta.trigger}`}</p>{review && <details className="saved-review"><summary>查看需求与生成说明</summary><ReviewNotes review={review}/></details>}</div></div><div className="task-details"><span><Clock3 size={15}/> {meta.schedule}</span><span><Activity size={15}/> {({ always: '无条件报告', sql: 'SQL 条件', agent: 'AI 判断', unconfigured: '条件待补充' } as Record<string,string>)[meta.trigger] || meta.trigger}</span><span className={`source-badge ${source}`}>{source === 'yaml' ? '系统预设' : '任务库'}</span></div><div className="task-actions"><span className={`status-chip ${isDraft ? 'draft' : enabled === true ? 'enabled' : enabled === false ? 'disabled' : 'unknown'}`}><i/>{isDraft ? '草稿' : enabled === true ? '已启用' : enabled === false ? '已停用' : '状态未知'}</span>{source === 'registry' && <><TaskLifecycle task={task} request={apiRequest} onChanged={fetchTasks} onEdit={() => editDraft(task)}/><TaskTrial task={task} settings={trialSettings} request={apiRequest} onViewReports={() => navigate('reports',String(task.task_id))}/></>}{isDraft && <button className="icon-button delete" onClick={() => setDeleteTarget(task)} title="删除草稿"><X size={15}/></button>}</div></div>
           })}</div>}
           <div className="info-note"><ShieldCheck size={17}/><span>YAML 任务通过原配置管理。Registry 草稿须审核启用；暂停可阻止后续批次。现有 Job 未恢复，启用配置不会启动 Job。</span></div>
         </section>}
@@ -776,18 +786,18 @@ function App({ userLabel, authMode }: { userLabel?: string; authMode?: string })
             <div className="form-field"><label htmlFor="task-id">任务 ID</label><input id="task-id" value={taskForm.task_id} onChange={e => setTaskForm(f => ({ ...f, task_id: e.target.value }))} placeholder="unique_task_id" /></div>
             <div className="form-field"><label htmlFor="task-name">任务名称 *</label><input id="task-name" value={taskForm.name} onChange={e => setTaskForm(f => ({ ...f, name: e.target.value }))} placeholder="任务名称" /></div>
             <div className="form-field"><label htmlFor="task-description">描述</label><textarea id="task-description" value={taskForm.description} onChange={e => setTaskForm(f => ({ ...f, description: e.target.value }))} rows={2} placeholder="任务描述" /></div>
-            <div className="form-row"><div className="form-field"><label htmlFor="schedule-frequency">调度频率</label><select id="schedule-frequency" value={taskForm.schedule_freq} onChange={e => setTaskForm(f => ({ ...f, schedule_freq: e.target.value as ScheduleFreq }))}><option value="daily">每日</option><option value="weekly">每周</option><option value="interval">间隔天数</option></select></div>
+            <h3 className="form-section-title">执行计划</h3><div className="form-row"><div className="form-field"><label htmlFor="schedule-frequency">调度频率</label><select id="schedule-frequency" value={taskForm.schedule_freq} onChange={e => setTaskForm(f => ({ ...f, schedule_freq: e.target.value as ScheduleFreq }))}><option value="daily">每日</option><option value="weekly">每周</option><option value="interval">间隔天数</option></select></div>
               {taskForm.schedule_freq === 'weekly' && <div className="form-field"><label htmlFor="schedule-weekday">星期</label><select id="schedule-weekday" value={taskForm.schedule_weekday} onChange={e => setTaskForm(f => ({ ...f, schedule_weekday: e.target.value }))}>{WEEKDAYS.map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></div>}
               {taskForm.schedule_freq === 'interval' && <div className="form-field"><label htmlFor="interval-days">间隔天数</label><input id="interval-days" type="number" min={1} max={365} value={Number.isFinite(taskForm.interval_days) ? taskForm.interval_days : ''} onChange={e => setTaskForm(f => ({ ...f, interval_days: e.target.valueAsNumber }))} /></div>}
             </div>
-            <div className="form-row"><div className="form-field"><label htmlFor="schedule-time">检查时间</label><input id="schedule-time" type="time" value={taskForm.schedule_time} onChange={e => setTaskForm(f => ({ ...f, schedule_time: e.target.value }))}/></div><div className="form-field"><label htmlFor="schedule-timezone">时区</label><input id="schedule-timezone" list="timezones" value={taskForm.schedule_timezone} onChange={e => setTaskForm(f => ({ ...f, schedule_timezone: e.target.value }))}/><datalist id="timezones"><option value="Asia/Shanghai"/><option value="UTC"/><option value="America/Chicago"/></datalist></div></div>
+            <div className="form-row"><div className="form-field"><label htmlFor="schedule-time">检查时间</label><select id="schedule-time" value={taskForm.schedule_time} onChange={e => setTaskForm(f => ({ ...f, schedule_time: e.target.value }))}>{!SCHEDULE_HOURS.includes(taskForm.schedule_time) && <option value={taskForm.schedule_time} disabled>原时间 {taskForm.schedule_time} 不支持，请选择整点</option>}{SCHEDULE_HOURS.map(time => <option key={time} value={time}>{time}</option>)}</select><p className="form-hint">仅支持整点；暂不支持每小时重复。</p></div><div className="form-field"><label htmlFor="schedule-timezone">时区</label><input id="schedule-timezone" list="timezones" value={taskForm.schedule_timezone} onChange={e => setTaskForm(f => ({ ...f, schedule_timezone: e.target.value }))}/><datalist id="timezones"><option value="Asia/Shanghai"/><option value="UTC"/><option value="America/Chicago"/></datalist></div></div>
             {taskForm.schedule_freq === 'interval' && <div className="form-field"><label htmlFor="schedule-start">开始日期（间隔基准）</label><input id="schedule-start" type="date" value={taskForm.schedule_start_date} onChange={e => setTaskForm(f => ({ ...f, schedule_start_date: e.target.value }))}/></div>}
             <p className="form-hint">{scheduleDescription(buildCreatePayload(taskForm).schedule)}。这是计划配置，保存后不会开启调度。</p>
-            <div className="form-row"><div className="form-field"><label htmlFor="trigger-type">触发条件</label><select id="trigger-type" value={taskForm.trigger_type} onChange={e => setTaskForm(f => ({ ...f, trigger_type: e.target.value as TriggerType, agent_review: {} }))}><option value="always">每次检查都生成报告</option><option value="sql">SQL 条件</option><option value="agent">AI 判断条件（仅定性判断）</option><option value="unconfigured">待补充条件</option></select></div></div>
+            <h3 className="form-section-title">触发条件</h3><div className="form-row"><div className="form-field"><label htmlFor="trigger-type">触发条件</label><select id="trigger-type" value={taskForm.trigger_type} onChange={e => setTaskForm(f => ({ ...f, trigger_type: e.target.value as TriggerType, agent_review: {} }))}><option value="always">每次检查都生成报告</option><option value="sql">SQL 条件</option><option value="agent">AI 判断条件（仅定性判断）</option><option value="unconfigured">待补充条件</option></select></div></div>
             {taskForm.trigger_type === 'sql' && <div className="form-field"><label htmlFor="trigger-sql">触发 SQL 条件（待审核）</label><textarea id="trigger-sql" value={taskForm.trigger_sql} onChange={e => setTaskForm(f => ({ ...f, trigger_sql: e.target.value, sql_review: {} }))} rows={3} placeholder="粘贴已核对的 SQL；不确定时可留空，保存待补充草稿。" /></div>}
             {taskForm.trigger_type !== 'always' && <div className="form-field"><label htmlFor="trigger-prompt">业务判断条件</label><textarea id="trigger-prompt" value={taskForm.trigger_prompt} onChange={e => setTaskForm(f => ({ ...f, trigger_prompt: e.target.value, sql_review: {}, agent_review: {} }))} rows={3} placeholder="保留指标口径、比较周期、阈值；不确定之处请注明。" /></div>}
             {taskForm.trigger_type !== 'always' && <ConditionSQLFields form={taskForm} setForm={setTaskForm} request={conditionRequest}/>}
-            <div className="form-row"><div className="form-field"><label htmlFor="report-agent">报告 Agent</label><select id="report-agent" value={taskForm.report_agent} onChange={e => setTaskForm(f => ({ ...f, report_agent: e.target.value }))}><option value="genie_one">Genie One</option></select></div><div className="form-field"><label htmlFor="task-owner">负责人</label><input id="task-owner" value={userLabel || taskForm.owner} readOnly title="权限绑定登录账户，不能通过填写负责人更改" /></div></div>
+            <h3 className="form-section-title">报告与发送</h3><div className="form-row"><div className="form-field"><label htmlFor="report-agent">报告 Agent</label><select id="report-agent" value={taskForm.report_agent} onChange={e => setTaskForm(f => ({ ...f, report_agent: e.target.value }))}><option value="genie_one">Genie One</option></select></div><div className="form-field"><label htmlFor="task-owner">负责人</label><input id="task-owner" value={userLabel || taskForm.owner} readOnly title="权限绑定登录账户，不能通过填写负责人更改" /></div></div>
             <div className="form-field"><label htmlFor="report-prompt">报告分析要求</label><textarea id="report-prompt" value={taskForm.report_prompt} onChange={e => setTaskForm(f => ({ ...f, report_prompt: e.target.value }))} rows={3} placeholder="报告生成时的提示词" /></div>
             <div className="form-field"><label htmlFor="report-template">报告模板（可选）</label><textarea id="report-template" value={taskForm.report_template} onChange={e => setTaskForm(f => ({ ...f, report_template: e.target.value }))} rows={2}/></div>
             <EmailFields form={taskForm} setForm={setTaskForm} request={apiRequest}/>
@@ -830,7 +840,7 @@ function AuthenticatedApp() {
   if (!session) return <main className="content-state"><ShieldCheck size={36}/><h1>Business AI Hub</h1>
     <p>{error || '正在确认登录身份…'}</p>{error && <a className="primary-button" href="/auth/login">使用 Databricks 账户登录</a>}
     <small>任务、报告和数据访问使用你的账户权限。</small></main>
-  return <><App userLabel={session.user} authMode={session.mode}/>{session.mode !== 'local_cli' &&
+  return <><App userLabel={session.user} authMode={session.mode}/>{session.mode === 'oauth_user' &&
     <button className="secondary-button" style={{position:'fixed',bottom:12,right:12}} onClick={() => {
       void apiRequest('/api/session/logout',{method:'POST'}).then(() => window.location.assign('/'))
     }}>退出登录</button>}</>

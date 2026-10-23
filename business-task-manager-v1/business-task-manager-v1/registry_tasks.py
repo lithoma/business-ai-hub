@@ -28,6 +28,10 @@ def registry_task(row):
 
 
 def validate_schedule(schedule, dispatch):
+    if dispatch.get('mode')=='per_task':
+        from schedule_core import validate
+        validate(schedule,dispatch)
+        return
     if schedule.get('time', dispatch['time']) != dispatch['time'] or schedule.get('timezone', dispatch['timezone']) != dispatch['timezone']:
         raise ValueError('Existing Job supports only %s %s; save other times as drafts' % (dispatch['time'], dispatch['timezone']))
     frequency = schedule.get('frequency')
@@ -46,6 +50,9 @@ def validate_schedule(schedule, dispatch):
 
 def due_slot(task, dispatch, now: datetime):
     """One local-calendar slot per eligible day; no implicit backfill or retry."""
+    if dispatch.get('mode')=='per_task':
+        from schedule_core import plan
+        return plan(task['schedule'],now,dispatch)['slot']
     schedule = task['schedule']
     validate_schedule(schedule, dispatch)
     local = now.astimezone(ZoneInfo(dispatch['timezone']))

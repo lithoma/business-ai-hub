@@ -1,0 +1,47 @@
+version: 1
+# "local" means single-user loopback + local SQLite, NOT personal Workspace.
+# Business calls target the company Workspace below. Never use this for sharing.
+environment: local
+env:
+  DATABRICKS_HOST: https://adb-7405618086077365.5.azuredatabricks.net
+  SQL_WAREHOUSE_ID: 540a674067e832d2
+  HUB_LOCAL_AUTH_TYPE: external-browser # Python SDK opens company OAuth login; no CLI required.
+  TASK_REGISTRY_TABLE: local_demo.hub.task_registry # SQLite alias only, no cloud table created.
+  TASK_RUNS_TABLE: local_demo.hub.task_runs
+  TASK_PARSER_ENDPOINT: '' # Fill an approved existing company lightweight endpoint later.
+  HUB_INCLUDE_YAML_TASKS: false
+  HUB_WORKFLOW_ENABLED: true
+  GENIE_ONE_ENABLED: true
+  TASK_CONDITION_SQL_ENABLED: true
+  TASK_EXECUTION_ENABLED: true # Eligibility/manual execution only; no timers.
+  TASK_EMAIL_ENABLED: false
+  HUB_MANUAL_RUNS_ENABLED: true
+  TASK_SCHEDULER_MODE: per_task
+task_manager:
+  workspace_host: https://adb-7405618086077365.5.azuredatabricks.net
+  catalog: ''
+  schema: ''
+  schedule:
+    time: '09:00'
+    timezone: Asia/Shanghai
+    business_date_offset_days: 1
+  registry:
+    table: local_demo.hub.task_registry
+  execution:
+    enabled: false
+    runs_table: local_demo.hub.task_runs
+  notification:
+    email:
+      enabled: false
+      from_address: ''
+      allowed_recipients: []
+local:
+  database: ~/.local/share/business-ai-hub-company-demo/dev.sqlite3
+  databricks_profile: ''
+  port: 8765
+  interactive_model: true
+  interactive_analysis: true
+  conversation_workflow: true
+  genie_one_chat: true
+  manual_trials: true
+  trial_recipient: ''

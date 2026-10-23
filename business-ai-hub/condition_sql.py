@@ -88,14 +88,16 @@ def sign_test(query, window):
     return base64.urlsafe_b64encode(payload).decode() + '.' + hmac.new(_SECRET,payload,hashlib.sha256).hexdigest()
 
 
-def verified_test(query, review):
+def verified_test(query, review, *, allow_expired=False):
     try:
         raw, signature = review['test']['receipt'].split('.')
         payload = base64.urlsafe_b64decode(raw)
         if not hmac.compare_digest(hmac.new(_SECRET,payload,hashlib.sha256).hexdigest(), signature): return False
         data=json.loads(payload)
         from hub_auth import current_identity
-        return data.get('subject')==current_identity().key and data['hash']==digest(query) and data['window']==review['window'] and data['expires']>=datetime.now(timezone.utc).timestamp()
+        return (data.get('subject')==current_identity().key and data['hash']==digest(query)
+                and data['window']==review['window'] and type(data['expires']) is int
+                and (allow_expired or data['expires']>=datetime.now(timezone.utc).timestamp()))
     except (KeyError, ValueError, TypeError, AttributeError):
         return False
 

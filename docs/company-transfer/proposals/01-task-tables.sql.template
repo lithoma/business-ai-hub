@@ -1,0 +1,46 @@
+-- PROPOSAL ONLY. Not executable until placeholders and existing schemas are reviewed.
+-- Use an approved dedicated Schema (candidate: dev_catalog_aimlp.business_ai_hub).
+-- Have Terraform/platform owners provision it. Do not create or replace business schemas.
+-- Before executing, compare existing tables, constraints and inherited privileges.
+-- IF NOT EXISTS is not a schema upgrade: report any mismatch instead of auto-altering.
+
+CREATE TABLE IF NOT EXISTS `<CONFIRMED_CATALOG>`.`<CONFIRMED_SCHEMA>`.`business_task_registry_v1` (
+  task_id STRING NOT NULL,
+  name STRING NOT NULL,
+  description STRING,
+  enabled BOOLEAN NOT NULL,
+  schedule_config STRING,
+  trigger_config STRING,
+  report_config STRING,
+  owner STRING,
+  lifecycle_status STRING NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL
+) USING DELTA
+COMMENT 'Business AI Hub task metadata; creator authority is server-controlled';
+
+CREATE TABLE IF NOT EXISTS `<CONFIRMED_CATALOG>`.`<CONFIRMED_SCHEMA>`.`business_task_runs_v1` (
+  run_id STRING NOT NULL,
+  attempt_id STRING NOT NULL,
+  task_id STRING NOT NULL,
+  task_name STRING,
+  source STRING,
+  scheduled_slot STRING,
+  dispatch_date DATE,
+  status STRING,
+  trigger_reason STRING,
+  report_text STRING,
+  error_code STRING,
+  notification_status STRING,
+  config_json STRING,
+  provider_message_id STRING,
+  notification_error_code STRING,
+  artifacts_json STRING,
+  started_at TIMESTAMP,
+  finished_at TIMESTAMP
+) USING DELTA
+COMMENT 'Business AI Hub run history; provider acceptance is not an inbox delivery receipt';
+
+-- No old environment internal Delta properties, data rows, tasks, schedules or grants
+-- are imported. Required fields match database/ source definitions; this template
+-- deliberately leaves platform-specific Delta tuning to the existing company defaults.

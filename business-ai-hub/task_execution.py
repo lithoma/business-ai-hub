@@ -2,6 +2,8 @@
 from __future__ import annotations
 import os
 import re
+import json
+from datetime import datetime,timezone
 from typing import Literal
 import sqlglot
 from sqlglot import exp
@@ -26,16 +28,22 @@ def execution_enabled():
     return os.getenv('TASK_EXECUTION_ENABLED', '').lower() == 'true'
 
 
-def readiness(task):
+def readiness(task, *, for_execution=False):
     errors = []
+    schedule_plan=None
     try:
         schedule = ScheduleConfig.model_validate(task['schedule'])
         trigger = TriggerConfig.model_validate(task['trigger'])
         report = ReportConfig.model_validate(task['report'])
-        dispatch_time = os.getenv('TASK_DISPATCH_TIME', '09:00')
-        dispatch_timezone = os.getenv('TASK_DISPATCH_TIMEZONE', 'Asia/Shanghai')
-        if schedule.time != dispatch_time or schedule.timezone != dispatch_timezone:
-            errors.append(f'现有 Job 每天仅在 {dispatch_time} · {dispatch_timezone} 调用；此时间不兼容，请修改草稿。')
+        from schedule_core import validate
+        validate(schedule.model_dump())
+        from schedule_core import plan
+        schedule_plan=plan(schedule.model_dump(),datetime.now(timezone.utc))
+        if os.getenv('TASK_SCHEDULER_MODE','per_task')=='fixed':
+            dispatch_time=os.getenv('TASK_DISPATCH_TIME','09:00')
+            dispatch_timezone=os.getenv('TASK_DISPATCH_TIMEZONE','Asia/Shanghai')
+            if schedule.time!=dispatch_time or schedule.timezone!=dispatch_timezone:
+                errors.append(f'固定批次仅在 {dispatch_time} · {dispatch_timezone} 检查；请切换逐任务调度或修改时间。')
         if schedule.frequency == 'interval' and not schedule.start_date:
             errors.append('间隔任务需要开始日期。')
         if trigger.type == 'unconfigured':
@@ -45,12 +53,19 @@ def readiness(task):
         if trigger.type == 'agent':
             from condition_sql import verified_test
             from condition_decision import agent_test_key
-            if not verified_test(agent_test_key(trigger.agent,trigger.prompt,trigger.context_agents), report.condition_agent):
+            from hub_auth import owns
+            approved_active=for_execution and task.get('enabled') is True and task.get('lifecycle_status')=='active' and owns(task)
+            if not verified_test(agent_test_key(trigger.agent,trigger.prompt,trigger.context_agents), report.condition_agent,allow_expired=approved_active):
                 errors.append('请先运行一次 AI 条件测试；修改判断条件、Agent 或比较周期后需要重新测试。')
         if trigger.type == 'sql':
             validate_read_sql(trigger.sql)
             from condition_sql import verified_test
-            if not verified_test(trigger.sql, report.condition_sql):
+            from hub_auth import owns
+            approved_active=for_execution and task.get('enabled') is True and task.get('lifecycle_status')=='active' and owns(task)
+            # Receipt freshness is required for initial activation. An unchanged,
+            # already-approved recurring task must not stop merely after 7 days.
+            # HMAC, creator, SQL/prompt and window bindings remain mandatory.
+            if not verified_test(trigger.sql, report.condition_sql,allow_expired=approved_active):
                 errors.append('请先运行一次只读 SQL 条件测试；修改 SQL 或比较周期后需要重新测试。')
         if not report.agent or not report.prompt.strip():
             errors.append('请补充报告 Agent 和分析要求。')
@@ -69,15 +84,16 @@ def readiness(task):
         'configuration_ready': not errors,
         'execution_enabled': execution_enabled(),
         'can_activate': not errors and execution_enabled(),
+        'schedule_plan':schedule_plan,
         'warnings': [
             '启用表示允许执行器读取；不会启动或恢复 Job。',
             '请审核原始需求、生成假设和待补充信息；AI 判断及指标口径尚未业务验收。',
             '报告写入通知队列不代表邮件已送达。',
+            '自动调度尚未开启；计划时间不代表已经安排执行。',
         ],
         'background_authorization_ready': False,
-        'scheduler': {'time': os.getenv('TASK_DISPATCH_TIME', '09:00'),
-                      'timezone': os.getenv('TASK_DISPATCH_TIMEZONE', 'Asia/Shanghai'),
-                      'job_id': '997638013141610'},
+        'scheduler': {'mode':os.getenv('TASK_SCHEDULER_MODE','per_task'),
+                      'enabled':False,'job_id':None},
     }
 
 
@@ -119,6 +135,12 @@ def register_execution_routes(app, load_registry, load_yaml, query, registry_tab
     def check_readiness(task_id: str):
         task = find(task_id)
         result = readiness(task)
+        scheduler=getattr(app.state,'scheduler',None)
+        if scheduler:
+            state=scheduler.status()
+            result['scheduler'].update(enabled=state['enabled'])
+            if state['enabled']:
+                result['warnings'][-1]=f"当前本地执行器每 {state['interval_seconds']} 秒检查到期任务；报告不会自动发信。"
         if task.get('report', {}).get('delivery', {}).get('enabled'):
             try:
                 catalog = load_email_catalog()
@@ -205,4 +227,11 @@ def register_execution_routes(app, load_registry, load_yaml, query, registry_tab
                 LIMIT {limit + 1} OFFSET {offset}''', params) or []
         except Exception as exc:
             raise HTTPException(503, '报告历史暂不可用；请检查执行记录表及 App 读取权限。') from exc
+        # Keep durable MIME bytes server-side; list results need only report metadata.
+        for row in rows:
+            try:
+                artifacts=json.loads(row.get('artifacts_json') or '[]')
+                row['artifacts_json']=json.dumps([item for item in artifacts
+                    if not isinstance(item,dict) or item.get('kind')!='hub_run'],ensure_ascii=False)
+            except (ValueError,TypeError):row['artifacts_json']='[]'
         return {'runs': rows[:limit], 'next_offset': offset + limit if len(rows) > limit else None}

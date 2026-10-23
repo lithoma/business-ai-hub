@@ -31,6 +31,7 @@ class Identity:
     label: str
     mode: str
     client: object = field(repr=False, compare=False)
+    actor_subject: str = ''
 
     @property
     def key(self):
@@ -38,8 +39,10 @@ class Identity:
 
     @property
     def security(self):
-        return {'version': 1, 'creator_subject': self.subject, 'workspace': self.workspace,
-                'execution_authority': 'creator'}
+        result={'version': 1, 'creator_subject': self.subject, 'workspace': self.workspace,
+                'execution_authority': 'app_service_principal' if self.mode=='databricks_app' else 'creator'}
+        if self.actor_subject:result['created_by_platform_user']=self.actor_subject
+        return result
 
 
 def current_identity():
@@ -103,6 +106,9 @@ class AuthManager:
         self.sessions, self.pending = {}, {}
         self.lock = threading.RLock()
         self.local = None
+        from task_authorization import CreatorAuthorizations
+        self.task_authorizations = CreatorAuthorizations()
+        self.creator_resolver = None  # Company broker injection: server code only.
 
     def oauth_client(self):
         try:
@@ -123,6 +129,9 @@ class AuthManager:
         self.pending = {k:v for k,v in self.pending.items() if v[0]>now}
 
     def resolve(self, request):
+        if self.mode in ('databricks_app','databricks_app_obo'):
+            from apps_auth import resolve_app_identity
+            return resolve_app_identity(request,self)
         if self.mode == 'local_cli':
             if not request.client or request.client.host not in ('127.0.0.1', '::1', 'localhost'):
                 raise HTTPException(403, '本地 CLI 模式只允许本机访问。')
@@ -130,7 +139,13 @@ class AuthManager:
                 raise HTTPException(403, '本地模式拒绝外部 Host。')
             with self.lock:
                 if self.local is None:
-                    self.local = verified_identity(WorkspaceClient(profile=os.getenv('HUB_LOCAL_PROFILE','business-ai-hub')), 'local_cli')
+                    if os.getenv('HUB_LOCAL_AUTH_TYPE')=='external-browser':
+                        self.local=verified_identity(WorkspaceClient(
+                            host=workspace_host(os.environ['DATABRICKS_HOST']),auth_type='external-browser',
+                            scopes=['iam.current-user:read','ai-gateway','sql:restricted-query','model-serving']), 'local_cli')
+                    elif not os.getenv('HUB_LOCAL_AUTH_TYPE'):
+                        self.local = verified_identity(WorkspaceClient(profile=os.getenv('HUB_LOCAL_PROFILE','business-ai-hub')), 'local_cli')
+                    else:raise HTTPException(503,'未知本地登录方式；未回退其他身份。')
                 return self.local
         if self.mode != 'oauth':
             raise HTTPException(503, '未知身份认证模式；未回退到共享身份。')
@@ -143,6 +158,7 @@ class AuthManager:
         return item[1]
 
     def start_login(self):
+        if self.mode in ('databricks_app','databricks_app_obo'):raise HTTPException(409,'请通过 Databricks Apps 平台登录并同意用户授权。')
         if self.mode != 'oauth': raise HTTPException(409, '本地使用 CLI 用户身份，无需网页登录。')
         consent = self.oauth_client().initiate_consent()
         nonce = secrets.token_urlsafe(32)
@@ -196,12 +212,15 @@ class IdentityMiddleware:
         try:
             identity = await run_in_threadpool(manager.resolve,request)
             origin = request.headers.get('origin')
-            expected = manager.origin if manager.mode == 'oauth' else str(request.base_url).rstrip('/')
+            expected = manager.origin if manager.mode in ('oauth','shared_trial','databricks_app','databricks_app_obo') else str(request.base_url).rstrip('/')
             if request.method not in ('GET','HEAD','OPTIONS'):
-                if (origin and origin != expected) or (manager.mode=='oauth' and not origin):
+                if (origin and origin != expected) or (manager.mode in ('oauth','shared_trial','databricks_app','databricks_app_obo') and not origin):
                     raise HTTPException(403, '请求来源不匹配，请从本站重新操作。')
                 if request.headers.get('sec-fetch-site') == 'cross-site':
                     raise HTTPException(403, '禁止跨站修改请求。')
+            # Request identity automatically supplies the creator credential; no
+            # separate per-task consent/button and no shared identity substitution.
+            manager.task_authorizations.remember(identity)
             marker = _context.set(identity)
             try:
                 async def no_cache(message):
@@ -230,11 +249,18 @@ def install_auth(app):
     def session():
         user = current_identity()
         return {'authenticated':True,'user':user.label,'subject':user.subject,'workspace':user.workspace,
-                'mode':user.mode,'data_authority':'current_user','task_authority':'creator',
-                'background_delegation_ready':False}
+                'mode':user.mode,'data_authority':'app_service_principal' if user.mode=='databricks_app' else 'current_user',
+                'task_authority':'shared_app' if user.mode=='databricks_app' else 'creator',
+                'background_delegation_ready':False,
+                'task_authorization':app.state.auth.task_authorizations.status(user)}
+
+    @app.get('/api/session/task-authorization')
+    def task_authorization():
+        return app.state.auth.task_authorizations.status(current_identity())
 
     @app.post('/api/session/logout')
     def logout(request: Request):
+        app.state.auth.task_authorizations.revoke(current_identity())
         with app.state.auth.lock:
             app.state.auth.sessions.pop(request.cookies.get(SESSION_COOKIE,''), None)
         response = JSONResponse({'status':'signed_out'})

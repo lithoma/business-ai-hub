@@ -1,4 +1,5 @@
 export type ScheduleFreq = 'daily' | 'weekly' | 'interval'
+export const SCHEDULE_HOURS = Array.from({ length: 24 }, (_, hour) => `${String(hour).padStart(2, '0')}:00`)
 export type TriggerType = 'always' | 'sql' | 'agent' | 'unconfigured'
 export const WEEKDAYS = [
   ['monday', '周一'], ['tuesday', '周二'], ['wednesday', '周三'],
@@ -108,7 +109,7 @@ export function buildCreatePayload(f: TaskFormState): DraftConfiguration {
 
 export function formError(f: TaskFormState): string | null {
   if (!f.task_id.trim() || !f.name.trim()) return '任务 ID 和名称不能为空。'
-  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(f.schedule_time)) return '请选择有效的检查时间。'
+  if (!SCHEDULE_HOURS.includes(f.schedule_time)) return '检查时间仅支持整点（00:00–23:00），请重新选择。'
   try { new Intl.DateTimeFormat('zh-CN', { timeZone: f.schedule_timezone.trim() }) } catch { return '请选择有效的时区。' }
   if (f.schedule_freq === 'interval' && (!Number.isInteger(f.interval_days) || f.interval_days < 1 || f.interval_days > 365)) return '间隔天数必须为 1–365。'
   if (f.email_enabled && (!emailAddresses(f.email_to).length || [...emailAddresses(f.email_to), ...emailAddresses(f.email_cc)].some(address => !/^[^@\s<>,;]+@[^@\s<>,;]+\.[^@\s<>,;]+$/.test(address)))) return '请填写有效的收件人/抄送邮箱。'

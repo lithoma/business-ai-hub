@@ -1,0 +1,39 @@
+version: 1
+environment: local
+# Public resource identifiers only. Authentication stays in the existing SDK profile.
+env:
+  DATABRICKS_HOST: https://dbc-f19e9824-546f.cloud.databricks.com
+  SQL_WAREHOUSE_ID: a54c7a1cd51e6901
+  TASK_REGISTRY_TABLE: workspace.douyin.business_task_registry_v1
+  TASK_RUNS_TABLE: workspace.douyin.business_task_runs_v1
+  TASK_PARSER_ENDPOINT: system.ai.gpt-oss-20b
+  HUB_WORKFLOW_ENABLED: true
+  GENIE_ONE_ENABLED: true
+  TASK_CONDITION_SQL_ENABLED: true
+  TASK_EXECUTION_ENABLED: true # Local eligibility only; never starts a Job.
+  TASK_EMAIL_ENABLED: false  # Local mail still needs its separate explicit confirmation.
+  HUB_MANUAL_RUNS_ENABLED: true
+  TASK_SCHEDULER_MODE: per_task
+task_manager:
+  workspace_host: https://dbc-f19e9824-546f.cloud.databricks.com
+  catalog: workspace
+  schema: douyin
+  schedule:
+    time: '09:00'
+    timezone: Asia/Shanghai
+    business_date_offset_days: 487
+  registry:
+    table: workspace.douyin.business_task_registry_v1
+  execution:
+    enabled: false
+    runs_table: workspace.douyin.business_task_runs_v1
+local:
+  database: ~/.local/share/business-ai-hub/dev.sqlite3
+  databricks_profile: business-ai-hub
+  port: 8765
+  interactive_model: true
+  interactive_analysis: true
+  conversation_workflow: true
+  genie_one_chat: true
+  manual_trials: true
+  trial_recipient: tianyili397@gmail.com

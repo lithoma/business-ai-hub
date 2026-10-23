@@ -1,0 +1,44 @@
+version: 1
+environment: company
+# Target Azure Workspace; never load credentials or development settings from this file.
+# Genie One: /ai-gateway/mcp-services/system.ai.genie_one_mcp
+# SQL uses the existing Statement Execution REST API; SQL MCP is optional.
+env:
+  DATABRICKS_HOST: https://adb-7405618086077365.5.azuredatabricks.net
+  SQL_WAREHOUSE_ID: 540a674067e832d2 # dydf_dev_sqlwh; currently stopped.
+  HUB_AUTH_MODE: oauth
+  HUB_PUBLIC_ORIGIN: '' # Internal HTTPS site, not the Databricks Workspace URL.
+  HUB_OAUTH_CLIENT_ID: '' # Public ID of the company-registered OAuth app.
+  HUB_OAUTH_SCOPES: iam.current-user:read ai-gateway sql:restricted-query model-serving offline_access
+  HUB_STORAGE_PROFILE: business-ai-hub-storage # Configure this SDK profile outside the ZIP.
+  TASK_REGISTRY_TABLE: '' # Fill the confirmed company catalog.schema.table.
+  TASK_RUNS_TABLE: ''
+  TASK_PARSER_ENDPOINT: '' # Reuse an existing compatible company model, after verification.
+  CONVERSATION_ROUTER_ENDPOINT: ''
+  HUB_WORKFLOW_ENABLED: true
+  GENIE_ONE_ENABLED: false # Enable only after target permissions and smoke-test approval.
+  TASK_CONDITION_SQL_ENABLED: false
+  TASK_EXECUTION_ENABLED: false
+  TASK_EMAIL_ENABLED: false
+  HUB_MANUAL_RUNS_ENABLED: false # Open explicitly after company storage/identity integration.
+  TASK_SCHEDULER_MODE: per_task
+task_manager:
+  workspace_host: https://adb-7405618086077365.5.azuredatabricks.net
+  catalog: ''
+  schema: ''
+  schedule:
+    time: '09:00'
+    timezone: Asia/Shanghai
+    business_date_offset_days: 1
+  registry:
+    table: '' # Same value as TASK_REGISTRY_TABLE above.
+  execution:
+    enabled: false
+    runs_table: '' # Same value as TASK_RUNS_TABLE above.
+  notification:
+    provider: gmail
+    outbox_table: '' # Old SQL Alert path is not used for the company email migration.
+    email:
+      enabled: false
+      from_address: ''
+      allowed_recipients: []

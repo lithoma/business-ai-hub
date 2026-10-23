@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { scheduleDescription, type DraftReview } from './taskDrafts'
@@ -6,7 +6,7 @@ import { ReportMail, type TrialSettings } from './ManualTrial'
 
 type Request = <T>(url: string, options?: RequestInit, timeoutMs?: number) => Promise<T>
 type Task = Record<string, unknown>
-type Readiness = { errors: string[]; warnings: string[]; execution_enabled: boolean; can_activate: boolean; updated_at: string; configuration?: Task }
+type Readiness = { errors: string[]; warnings: string[]; execution_enabled: boolean; can_activate: boolean; updated_at: string; configuration?: Task; schedule_plan?: {next_run_at?: string; timezone?: string}; scheduler?: {enabled:boolean} }
 
 export function TaskLifecycle({ task, request, onChanged, onEdit }: { task: Task; request: Request; onChanged: () => Promise<void>; onEdit: () => void }) {
   const [open, setOpen] = useState(false)
@@ -14,6 +14,7 @@ export function TaskLifecycle({ task, request, onChanged, onEdit }: { task: Task
   const [reviewed, setReviewed] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const submitting = useRef(false)
   const status = String(task.lifecycle_status || 'draft')
   const storedTask = ready?.configuration || task
   const schedule = (storedTask.schedule || {}) as Record<string, unknown>
@@ -32,8 +33,8 @@ export function TaskLifecycle({ task, request, onChanged, onEdit }: { task: Task
     finally { setBusy(false) }
   }
   async function confirm() {
-    if (!ready || busy) return
-    setBusy(true); setError('')
+    if (!ready || busy || submitting.current || (action === 'activate' && (!ready.can_activate || !reviewed))) return
+    submitting.current = true; setBusy(true); setError('')
     try {
       await request(url + '/lifecycle', { method: 'POST', body: JSON.stringify({
         action, confirm: true, reviewed, expected_updated_at: ready.updated_at,
@@ -41,12 +42,12 @@ export function TaskLifecycle({ task, request, onChanged, onEdit }: { task: Task
       setOpen(false)
       await onChanged()
     } catch (e) { setError(e instanceof Error ? e.message : '状态变更失败，请刷新核对。') }
-    finally { setBusy(false) }
+    finally { submitting.current = false; setBusy(false) }
   }
   return <>
     {status === 'draft' && <button className="secondary-button" onClick={onEdit}>编辑草稿</button>}
     <button className="secondary-button" onClick={() => void inspect()}>{label}</button>
-    {open && <div className="modal-overlay"><div className="modal-content small" role="dialog" aria-modal="true" aria-label={label}>
+    {open && <div className="modal-overlay"><div className="modal-content small trial-modal" role="dialog" aria-modal="true" aria-label={label}>
       <div className="modal-header"><h2>{label}：{String(storedTask.name)}</h2><button className="icon-button" disabled={busy} onClick={() => setOpen(false)} aria-label="关闭审核">×</button></div>
       <div className="modal-body">
         <p>{action === 'activate' ? '确认调度、触发条件、报告提示词及生成说明。启用只改变 Registry 状态，不会启动 Job。' : action === 'pause' ? '暂停后，后续批次会跳过此任务；已经开始的执行仍可能完成。' : '转回草稿后可以修改配置，再重新审核启用。'}</p>
@@ -55,6 +56,7 @@ export function TaskLifecycle({ task, request, onChanged, onEdit }: { task: Task
         {ready && action === 'activate' && <>
           <section className="activation-config" aria-label="待审核任务配置">
             <p><strong>调度：</strong>{scheduleDescription(schedule)}</p>
+            {ready.schedule_plan?.next_run_at && <p><strong>下一次计划时间：</strong>{ready.schedule_plan.next_run_at} · {ready.scheduler?.enabled?'定时检查已开启':'自动调度未开启'}</p>}
             <p><strong>触发方式：</strong>{trigger.type === 'always' ? '按期无条件生成' : trigger.type === 'agent' ? '由 Agent 判断条件' : trigger.type === 'sql' ? 'SQL 条件' : '待补充'}</p>
             {trigger.prompt ? <p><strong>判断条件：</strong>{String(trigger.prompt)}</p> : null}
             {trigger.sql ? <pre>{String(trigger.sql)}</pre> : null}
@@ -68,11 +70,12 @@ export function TaskLifecycle({ task, request, onChanged, onEdit }: { task: Task
           {ready.errors.length > 0 && <ul role="alert">{ready.errors.map((e, i) => <li key={i}>{e}</li>)}</ul>}
           {!ready.execution_enabled && <p>执行集成尚未开放；请完成部署验收后启用。当前草稿会保留。</p>}
           <ul>{ready.warnings.map((w, i) => <li key={i}>{w}</li>)}</ul>
-          <label><input type="checkbox" checked={reviewed} onChange={e => setReviewed(e.target.checked)}/> 我已审核配置、生成假设和待补充信息</label>
+          <label className="trial-confirm"><input type="checkbox" checked={reviewed} disabled={busy} onChange={e => setReviewed(e.target.checked)}/> 我已审核配置、生成假设和待补充信息</label>
         </>}
       </div>
       <div className="form-actions"><button className="secondary-button" disabled={busy} onClick={() => setOpen(false)}>取消</button>
         <button className="primary-button" disabled={busy || !ready || (action === 'activate' && (!ready.can_activate || !reviewed))} onClick={() => void confirm()}>确认{label}</button></div>
+      {ready && action === 'activate' && <p className="trial-button-hint">{!ready.can_activate ? '请先解决上方提示的问题，再启用任务。' : !reviewed ? `勾选“我已审核”后即可启用；${ready.scheduler?.enabled?'会进入已开启的定时检查。':'不会启动自动调度。'}` : '已完成审核，可以确认启用。'}</p>}
     </div></div>}
   </>
 }
@@ -114,15 +117,15 @@ export function Reports({ request, initialTaskId = '', trialSettings }: { reques
     {busy && <p role="status">正在读取执行记录…</p>}
     {loaded && !busy && !error && runs.length === 0 && <div className="content-state">暂无执行记录。保存草稿不会生成报告。</div>}
     {!error && <div className="run-list">{runs.map(run => <article className="run-card" key={run.run_id}>
-      <h2>{run.task_name || run.task_id}</h2><p>{STATUS[run.status] || run.status} · {run.source === 'manual_local' ? `手动测试 · 业务日期 ${run.scheduled_slot.slice(-10)}` : run.scheduled_slot}</p>
+      <h2>{run.task_name || run.task_id}</h2><p>{STATUS[run.status] || run.status} · {['manual_local','manual'].includes(run.source || '') ? `手动试运行${run.scheduled_slot.startsWith('retry:') ? ' · 明确重试' : ` · 业务日期 ${run.scheduled_slot.slice(-10)}`}` : run.scheduled_slot}</p>
       <small>开始：{run.started_at} · 完成：{run.finished_at || '—'}</small>
       {run.trigger_reason && <p>条件判断：{run.trigger_reason}</p>}
-      {run.error_code && <p role="alert">失败类型：{run.error_code}；{run.source === 'manual_local' ? '请核对业务日期、数据和本地试运行状态。' : '请检查 Job 日志和 Agent 配置。'}</p>}
+      {run.error_code && <p role="alert">失败类型：{run.error_code}；{['manual_local','manual','scheduled'].includes(run.source || '') ? '请核对业务日期、任务配置与执行身份；不会自动重试。' : '请检查 Job 日志和 Agent 配置。'}</p>}
       <p>通知：{({ QUEUED: '已入队（未确认送达）', EMAIL_SENDING: '邮件发送处理中（中断后需核对）', EMAIL_ACCEPTED: '邮件服务已接收（未确认送达）', EMAIL_FAILED: '邮件发送失败', EMAIL_UNKNOWN: '发送结果不确定，请先核对发件记录' } as Record<string, string>)[run.notification_status] || '未入队'}</p>
       {run.notification_error_code && <p>邮件错误：{run.notification_error_code}</p>}
       {run.provider_message_id && <small>邮件记录：{run.provider_message_id}</small>}
       {run.report_text && <details><summary>查看报告</summary><div className="report-body"><ReactMarkdown remarkPlugins={[remarkGfm]}>{run.report_text}</ReactMarkdown></div></details>}
-      {run.source === 'manual_local' && run.status === 'REPORT_CREATED' && <ReportMail runId={run.run_id} settings={trialSettings} request={request} onChanged={() => void load()}/>}
+      {['manual_local','manual','scheduled'].includes(run.source || '') && run.status === 'REPORT_CREATED' && <ReportMail runId={run.run_id} settings={trialSettings} request={request} onChanged={() => void load()}/>}
     </article>)}</div>}
     {loaded && offset !== null && !error && <button className="secondary-button" disabled={busy} onClick={() => void load(offset)}>加载更多</button>}
   </section>

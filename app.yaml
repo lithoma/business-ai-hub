@@ -1,0 +1,8 @@
+command:
+  - python
+  - scripts/run-app.py
+env:
+  - name: HUB_CONFIG_FILE
+    value: config/company-apps.yaml
+# DATABRICKS_HOST / CLIENT_ID / CLIENT_SECRET / APP_PORT come from the platform.
+# Do not put passwords, PATs or OAuth secret values into this file.

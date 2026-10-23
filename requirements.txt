@@ -1,0 +1,12 @@
+fastapi>=0.104,<1
+uvicorn[standard]>=0.24,<1
+databricks-sdk>=0.122.0,<1
+PyYAML>=6.0,<7
+pydantic>=2,<3
+requests>=2.31,<3
+sqlglot==30.0.0
+mcp>=1.24,<2
+jsonschema>=4.25,<5
+Jinja2>=3.1.6,<4
+markdown-it-py>=4,<5
+google-auth>=2.40,<3

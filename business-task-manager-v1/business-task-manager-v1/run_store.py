@@ -52,6 +52,7 @@ class RunStore:
         return [row.asDict() for row in self.spark.sql(f'''SELECT run_id,task_name,report_text,dispatch_date
             FROM {self.table} WHERE dispatch_date<=CAST(:day AS DATE)
             AND status='REPORT_CREATED' AND notification_status='NOT_QUEUED'
+            AND source NOT IN ('manual','manual_local','scheduled')
             ORDER BY started_at,run_id''', args={'day': day.isoformat()}).collect()]
 
     def mark_queued(self, keys):
@@ -68,6 +69,7 @@ class RunStore:
         return [row.asDict() for row in self.spark.sql(f"""SELECT run_id,task_name,config_json,report_text,trigger_reason
             FROM {self.table} WHERE dispatch_date<=CAST(:day AS DATE) AND status='REPORT_CREATED'
               AND notification_status='NOT_QUEUED'
+              AND source NOT IN ('manual','manual_local','scheduled')
               AND get_json_object(config_json,'$.report.delivery.enabled')='true'
             ORDER BY started_at,run_id LIMIT {limit}""", args={'day': day.isoformat()}).collect()]
 
